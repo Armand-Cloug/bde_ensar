@@ -1,0 +1,247 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_DEV")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  firstName      String    @map("first_name")
+  lastName       String    @map("last_name")
+  promotion      String?
+  birthdate      DateTime?
+  company        String?
+  email          String    @unique
+  password       String?
+  googleId       String?   @unique @map("google_id")
+  authType       String    @default("local") @map("auth_type") // 'local' | 'google'
+  isVerified     Boolean   @default(false) @map("is_verified")
+  verifyToken    String?   @map("verify_token")
+  role           String    @default("utilisateur") @map("role") // 'utilisateur' | 'admin'
+  isAdherent     Boolean   @default(false) @map("is_adherent")
+  isAlumni       Boolean   @default(false) @map("is_alumni")
+  adhesionStart  DateTime? @map("adhesion_start")
+  adhesionEnd    DateTime? @map("adhesion_end")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  alumniRequests       AlumniRequest[]
+  passwordResetTokens  PasswordResetToken[]
+  teamMembers          BdeTeamMember[]
+  createdEvents        Event[]
+  uploadedCourses      Cours[]
+  uploadedPhotos       GalleryPhoto[]
+  adhesions            Adhesion[]
+
+  @@map("users")
+}
+
+model AlumniRequest {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  diplome         String
+  anneeObtention  Int      @map("annee_obtention")
+  statut          String   @default("en_attente") @map("statut") // 'en_attente' | 'valide' | 'refuse'
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("alumni_requests")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model BdeTeam {
+  id          String   @id @default(cuid())
+  annee       String   @unique // ex: "2024-2025"
+  description String   @db.Text
+  image       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  members BdeTeamMember[]
+
+  @@map("bde_teams")
+}
+
+model BdeTeamMember {
+  id          String  @id @default(cuid())
+  teamId      String  @map("team_id")
+  userId      String  @map("user_id")
+  poste       String
+  photo       String?
+  description String? @db.Text
+
+  // Relations
+  team BdeTeam @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("bde_team_members")
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  title           String
+  description     String   @db.Text
+  date            DateTime
+  location        String?
+  inscriptionLink String?  @map("inscription_link")
+  image           String?
+  createdBy       String   @map("created_by")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relations
+  creator    User        @relation(fields: [createdBy], references: [id])
+  eventPages EventPage[]
+
+  @@map("events")
+}
+
+model EventPage {
+  id          String   @id @default(cuid())
+  eventId     String   @map("event_id")
+  slug        String   @unique
+  contentHtml String?  @map("content_html") @db.Text
+  contentJson String?  @map("content_json") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("event_pages")
+}
+
+model GalleryEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  coverImage  String?  @map("cover_image")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  photos GalleryPhoto[]
+
+  @@map("gallery_events")
+}
+
+model GalleryPhoto {
+  id              String  @id @default(cuid())
+  galleryEventId  String  @map("gallery_event_id")
+  imagePath       String  @map("image_path")
+  caption         String?
+  hasImageRights  Boolean @default(true) @map("has_image_rights")
+  uploadedBy      String  @map("uploaded_by")
+
+  // Relations
+  galleryEvent GalleryEvent @relation(fields: [galleryEventId], references: [id], onDelete: Cascade)
+  uploader     User         @relation(fields: [uploadedBy], references: [id])
+
+  @@map("gallery_photos")
+}
+
+model Formation {
+  id   String @id @default(cuid())
+  nom  String @unique
+
+  // Relations
+  semestres Semestre[]
+
+  @@map("formations")
+}
+
+model Semestre {
+  id          String @id @default(cuid())
+  formationId String @map("formation_id")
+  semestre    String // ex: "S5", "S6", etc.
+
+  // Relations
+  formation Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  ues       Ue[]
+
+  @@unique([formationId, semestre])
+  @@map("semestres")
+}
+
+model Ue {
+  id         String  @id @default(cuid())
+  semestreId String  @map("semestre_id")
+  ueNumber   Int     @map("ue_number") // 1 à 5
+  nomUe      String? @map("nom_ue")
+
+  // Relations
+  semestre Semestre  @relation(fields: [semestreId], references: [id], onDelete: Cascade)
+  matieres Matiere[]
+
+  @@unique([semestreId, ueNumber])
+  @@map("ues")
+}
+
+model Matiere {
+  id          String @id @default(cuid())
+  ueId        String @map("ue_id")
+  nomMatiere  String @map("nom_matiere")
+
+  // Relations
+  ue    Ue     @relation(fields: [ueId], references: [id], onDelete: Cascade)
+  cours Cours[]
+
+  @@map("matieres")
+}
+
+model Cours {
+  id          String   @id @default(cuid())
+  matiereId   String   @map("matiere_id")
+  title       String
+  description String?  @db.Text
+  filePath    String   @map("file_path")
+  uploadedBy  String   @map("uploaded_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  matiere  Matiere @relation(fields: [matiereId], references: [id], onDelete: Cascade)
+  uploader User    @relation(fields: [uploadedBy], references: [id])
+
+  @@map("cours")
+}
+
+model Adhesion {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  anneeScolaire     String   @map("annee_scolaire") // ex: "2024-2025"
+  modePaiement      String   @map("mode_paiement") // 'en_ligne' | 'liquide'
+  paiementConfirme  Boolean  @default(false) @map("paiement_confirme")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, anneeScolaire])
+  @@map("adhesions")
+}
+
+model SiteConfig {
+  id              String @id @default(cuid())
+  adhesionTarif   Float  @map("adhesion_tarif")
+  reseauxSociaux  String @map("reseaux_sociaux") @db.Text // JSON string
+  mailContact     String @map("mail_contact")
+
+  @@map("site_config")
+}
