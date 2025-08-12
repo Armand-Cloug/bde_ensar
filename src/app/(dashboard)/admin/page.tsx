@@ -1,29 +1,28 @@
-// app/admin/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
+import AdminPanel from "@/components/admin/AdminPanel";
 
 export default async function AdminPage() {
   const session = await getServerSession(authOptions);
+  if (!session?.user) redirect("/sign-in");
+  if (session.user.role !== "admin") redirect("/");
 
-  // Pas connecté
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+  const user = await db.user.findUnique({
+    where: { id: String(session.user.id) },
+    select: {
+      firstName: true,   // ⬅️
+      lastName: true,    // ⬅️
+      email: true,
+      image: true,
+      promotion: true,
+      birthdate: true,
+      company: true,
+      role: true,
+    },
+  });
 
-  // Mauvais rôle
-  if (session.user.role !== "admin") {
-    redirect("/");
-  }
-
-  // ✅ Contenu inchangé
-  return (
-    <main className="">
-      <h1 className="text-4xl font-bold mb-4">
-        Welcome to Admin page {session?.user?.email}
-      </h1>
-      <p className="text-lg text-gray-700">I'm ROOT</p>
-      <p className="text-lg text-gray-700">Compte : {session?.user?.email}</p>
-    </main>
-  );
+  if (!user) redirect("/sign-in");
+  return <AdminPanel user={user} />;
 }
