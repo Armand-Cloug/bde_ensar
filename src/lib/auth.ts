@@ -34,30 +34,25 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // Au moment du sign-in, on a `user`
       if (user) {
         token.id = (user as any).id ?? token.sub;
         token.role = (user as any).role ?? token.role;
+        token.isAdherent = (user as any).isAdherent ?? token.isAdherent; // ✅
       }
-      // Si le rôle n'est pas encore dans le token (ex: login Google), on le récupère 1 fois
-      if (!token.role && token.sub) {
+      if (token.sub && token.isAdherent === undefined) {
         const u = await db.user.findUnique({
           where: { id: String(token.sub) },
-          select: { role: true },
+          select: { isAdherent: true },
         });
-        token.role = u?.role ?? "utilisateur";
+        token.isAdherent = u?.isAdherent ?? false;
       }
       return token;
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: (token as any).id ?? token.sub ?? "",
-          role: (token as any).role ?? null,
-        },
-      };
-    },
+      session.user.id = (token as any).id ?? "";
+      session.user.role = (token as any).role ?? null;
+      session.user.isAdherent = (token as any).isAdherent ?? false; // ✅
+      return session;
+    }
   },
 };
