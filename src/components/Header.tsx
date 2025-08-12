@@ -1,5 +1,5 @@
-import MainNav from "./MainNav"
-import MobileNav from "./MobileNav"
+import MainNav from "./navbar/MainNav"
+import MobileNav from "./navbar/MobileNav"
 import Link from "next/link";
 import { Instagram } from 'lucide-react';
 import { Lock } from 'lucide-react';

@@ -1,9 +1,10 @@
-import { Prisma } from "@prisma/client";
+import { db } from "@/lib/db";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { db } from "@/lib/db";
 import { compare } from "bcrypt";
+
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -15,6 +16,12 @@ export const authOptions: NextAuthOptions = {
     signIn: '/sign-in',
   },
   providers: [
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+    }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -33,10 +40,12 @@ export const authOptions: NextAuthOptions = {
         if (!existingUser || !existingUser.password) {
           return null;
         }
-
-        const passwordMatch = await compare(credentials.password, existingUser.password);
-        if (!passwordMatch) {
-          return null;
+        
+        if(existingUser.password) {
+          const passwordMatch = await compare(credentials.password, existingUser.password);
+          if (!passwordMatch) {
+            return null;
+          }
         }
 
         return {
@@ -47,11 +56,24 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {  
-    async jwt({ token, user, account, profile, isNewUser }) {
-      return token;
+    async jwt({ token, user }) {
+      if(user) {  
+        return {
+          ...token,
+          id: user.id,
+        }
+      }
+      return token;  
     },
-    async session({ session, user, token }) {
-      return session;
+    
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+        },
+      };
     },
   }
 };

@@ -10,27 +10,58 @@ datasource db {
   url      = env("DATABASE_URL_DEV")
 }
 
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+ 
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@map("sessions")
+}
+ 
 model User {
   id             String    @id @default(cuid())
-  firstName      String    @map("first_name")
-  lastName       String    @map("last_name")
+  name           String?
+  firstName      String?
+  lastName       String?
+  email          String?   @unique
+  emailVerified  DateTime? @map("email_verified")
+  password       String?
+  createdAt      DateTime  @default(now())    
+  image          String?
   promotion      String?
   birthdate      DateTime?
   company        String?
-  email          String    @unique
-  password       String?
-  googleId       String?   @unique @map("google_id")
-  authType       String    @default("local") @map("auth_type") // 'local' | 'google'
-  isVerified     Boolean   @default(false) @map("is_verified")
-  verifyToken    String?   @map("verify_token")
-  role           String    @default("utilisateur") @map("role") // 'utilisateur' | 'admin'
+  role           String    @default("utilisateur") @map("role")
   isAdherent     Boolean   @default(false) @map("is_adherent")
   isAlumni       Boolean   @default(false) @map("is_alumni")
   adhesionStart  DateTime? @map("adhesion_start")
   adhesionEnd    DateTime? @map("adhesion_end")
-  createdAt      DateTime  @default(now()) @map("created_at")
 
   // Relations
+  accounts             Account[]
+  sessions             Session[]
   alumniRequests       AlumniRequest[]
   passwordResetTokens  PasswordResetToken[]
   teamMembers          BdeTeamMember[]
@@ -38,8 +69,17 @@ model User {
   uploadedCourses      Cours[]
   uploadedPhotos       GalleryPhoto[]
   adhesions            Adhesion[]
-
+ 
   @@map("users")
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model AlumniRequest {
