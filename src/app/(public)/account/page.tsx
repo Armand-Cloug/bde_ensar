@@ -59,7 +59,7 @@ export default async function AccountPage() {
   ];
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-4">
+    <main className="min-h-[calc(80vh-64px)] flex-1 flex flex-col justify-center items-center bg-white text-black">
       <Card className="w-full max-w-2xl">
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-4">
