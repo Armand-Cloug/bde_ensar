@@ -115,6 +115,7 @@ model BdeTeam {
   description String   @db.Text
   image       String?
   createdAt   DateTime @default(now()) @map("created_at")
+   isActive    Boolean  @default(false) @map("is_active")
 
   // Relations
   members BdeTeamMember[]
