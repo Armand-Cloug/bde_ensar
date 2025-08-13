@@ -1,58 +1,74 @@
-// lib/auth.ts
+// src/lib/auth.ts
 import { db } from "@/lib/db";
-import type { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import Google from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
-  pages: { signIn: "/sign-in", newUser: "/onboarding" },
+  session: { strategy: "jwt" },
+  pages: { signIn: "/sign-in" },
+
   providers: [
-    Google({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    Credentials({
+    CredentialsProvider({
       name: "Credentials",
       credentials: { email: { label: "email", type: "email" }, password: { label: "password", type: "password" } },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const user = await db.user.findUnique({
-          where: { email: credentials.email },
-          select: { id: true, email: true, password: true, role: true },
-        });
+        const user = await db.user.findUnique({ where: { email: credentials.email } });
         if (!user?.password) return null;
         const ok = await compare(credentials.password, user.password);
         if (!ok) return null;
-        return { id: String(user.id), email: user.email, role: user.role ?? "utilisateur" } as any;
+        return { id: user.id, email: user.email };
       },
     }),
   ],
+
   callbacks: {
+    // 🔁 IMPORTANT : on synchronise le token avec la DB régulièrement
     async jwt({ token, user }) {
+      // 1) Au login, on hydrate depuis "user"
       if (user) {
-        token.id = (user as any).id ?? token.sub;
-        token.role = (user as any).role ?? token.role;
-        token.isAdherent = (user as any).isAdherent ?? token.isAdherent; // ✅
+        const dbUser = await db.user.findUnique({ where: { id: String((user as any).id ?? token.id) } });
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+          token.isAdherent = dbUser.isAdherent;
+          token.adhesionStart = dbUser.adhesionStart?.toISOString();
+          token.adhesionEnd = dbUser.adhesionEnd?.toISOString();
+        }
       }
-      if (token.sub && token.isAdherent === undefined) {
-        const u = await db.user.findUnique({
-          where: { id: String(token.sub) },
-          select: { isAdherent: true },
-        });
-        token.isAdherent = u?.isAdherent ?? false;
+
+      // 2) À chaque requête, on resynchronise depuis la DB (léger site → OK)
+      if (token?.id) {
+        const dbUser = await db.user.findUnique({ where: { id: String(token.id) } });
+        if (dbUser) {
+          token.role = dbUser.role;
+          token.isAdherent = dbUser.isAdherent;
+          token.adhesionStart = dbUser.adhesionStart?.toISOString();
+          token.adhesionEnd = dbUser.adhesionEnd?.toISOString();
+        }
       }
       return token;
     },
+
     async session({ session, token }) {
-      session.user.id = (token as any).id ?? "";
-      session.user.role = (token as any).role ?? null;
-      session.user.isAdherent = (token as any).isAdherent ?? false; // ✅
+      session.user = {
+        ...session.user,
+        id: String(token.id),
+        role: (token as any).role ?? null,
+        isAdherent: Boolean((token as any).isAdherent),
+        adhesionStart: (token as any).adhesionStart ? new Date((token as any).adhesionStart) : null,
+        adhesionEnd: (token as any).adhesionEnd ? new Date((token as any).adhesionEnd) : null,
+      } as any;
       return session;
-    }
+    },
   },
 };

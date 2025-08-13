@@ -1,4 +1,3 @@
-// app/api/admin/users/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -11,24 +10,25 @@ export async function GET(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q")?.trim() ?? "";
-  const page = Number(searchParams.get("page") ?? "1");
-  const pageSize = Number(searchParams.get("pageSize") ?? "10");
-  const take = Math.min(Math.max(pageSize, 1), 100);
-  const skip = Math.max((page - 1) * take, 0);
+  const q        = (searchParams.get("q") ?? "").trim();
+  const page     = Math.max(1, Number(searchParams.get("page") ?? "1"));
+  const pageSize = Math.min(100, Math.max(1, Number(searchParams.get("pageSize") ?? "10")));
+  const skip     = (page - 1) * pageSize;
+  const take     = pageSize;
 
+  // ⚠️ Pas de "mode: 'insensitive'" ici pour compatibilité maximale (SQLite etc.)
   const where = q
     ? {
         OR: [
-          { firstName: { contains: q, mode: "insensitive" } },
-          { lastName:  { contains: q, mode: "insensitive" } },
-          { email:     { contains: q, mode: "insensitive" } },
+          { firstName: { contains: q } },
+          { lastName:  { contains: q } },
+          { email:     { contains: q } },
         ],
       }
     : {};
 
-  const [ total, users ] = await Promise.all([
-    db.user.count({ where }),
+  const [total, users] = await Promise.all([
+    db.user.count({ where }),   // ✅ count() n'accepte pas "select"
     db.user.findMany({
       where,
       select: { id: true, firstName: true, lastName: true, email: true },
@@ -39,9 +39,9 @@ export async function GET(req: Request) {
   ]);
 
   return NextResponse.json({
-    users: users.map(u => ({ ...u, id: String(u.id) })), // id en string pour le DataTable
+    users: users.map(u => ({ ...u, id: String(u.id) })),
+    total,
     page,
     pageSize: take,
-    total,
   });
 }

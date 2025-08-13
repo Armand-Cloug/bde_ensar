@@ -58,7 +58,7 @@ export default function BdeTab() {
 
   return (
     <Card>
-      <CardHeader className="flex items-center justify-between">
+      <CardHeader>
         <CardTitle>BDE</CardTitle>
       </CardHeader>
 
