@@ -106,6 +106,12 @@ const SignInForm = () => {
             Inscription
           </Link>
         </p>
+        <p className="text-center text-sm text-gray-600 mt-2">
+          Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser ici :{" "}
+          <Link className="text-blue-500 hover:underline" href="/reset-password">
+            Réinitialisation
+          </Link>
+        </p>
       </Form>
     </main>
   );

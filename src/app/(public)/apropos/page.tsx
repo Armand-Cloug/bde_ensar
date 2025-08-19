@@ -1,6 +1,7 @@
 // app/apropos/page.tsx
 import { db } from "@/lib/db";
 import MembersCarousel from "@/components/apropos/MembersCarousel";
+import { Sparkles } from "lucide-react";
 
 export default async function AproposPage() {
   const team = await db.bdeTeam.findFirst({
@@ -25,8 +26,8 @@ export default async function AproposPage() {
 
   if (!team) {
     return (
-      <main className="px-4 py-10 max-w-6xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6">À propos du BDE</h1>
+      <main className="px-4 md:px-6 max-w-6xl mx-auto py-10 md:py-14">
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">À propos du BDE</h1>
         <p className="text-muted-foreground">
           Aucune équipe active n’a été définie pour le moment.
         </p>
@@ -35,17 +36,32 @@ export default async function AproposPage() {
   }
 
   return (
-    <main className="px-4 py-10 max-w-6xl mx-auto space-y-10">
-      {/* En-tête : année + photo + description */}
-      <section className="space-y-4">
-        <h1 className="text-3xl md:text-4xl font-bold">
-          BDE {team.annee}
+    <main className="relative px-4 md:px-6 max-w-6xl mx-auto py-10 md:py-14 space-y-10">
+      {/* Décor doux (orange) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-20 h-[320px] w-[320px] rounded-full bg-orange-200/40 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-24 -right-10 h-[280px] w-[280px] rounded-full bg-amber-200/40 blur-3xl"
+      />
+
+      {/* En-tête : badge + titre */}
+      <section className="relative space-y-4">
+        <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-orange-700 bg-orange-50 border-orange-100">
+          <Sparkles className="h-3.5 w-3.5" />
+          À propos
+        </span>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+          BDE <span className="text-orange-600">{team.annee}</span>
         </h1>
 
+        {/* Photo + description */}
         <div className="grid gap-6 md:grid-cols-2 items-start">
-          {/* Photo de groupe */}
-          <div className="w-full overflow-hidden rounded-xl border">
-            {/* Utilise <img> pour éviter la config Next/Image si URL externe */}
+          {/* Carte photo de groupe */}
+          <div className="relative overflow-hidden rounded-2xl border bg-white shadow-sm">
+            {/* Utilise <img> si l'URL peut être externe */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={team.image ?? "/placeholder.png"}
@@ -54,9 +70,9 @@ export default async function AproposPage() {
             />
           </div>
 
-          {/* Description */}
-          <div className="prose max-w-none">
-            <p className="text-base leading-relaxed whitespace-pre-line">
+          {/* Carte description */}
+          <div className="relative overflow-hidden rounded-2xl border bg-white shadow-sm p-5 md:p-6">
+            <p className="text-base leading-relaxed text-muted-foreground whitespace-pre-line">
               {team.description}
             </p>
           </div>
@@ -64,8 +80,11 @@ export default async function AproposPage() {
       </section>
 
       {/* Carrousel des membres */}
-      <section className="space-y-4">
-        <h2 className="text-2xl md:text-3xl font-semibold">Les membres</h2>
+      <section className="relative space-y-4">
+        <h2 className="text-2xl md:text-3xl font-semibold">L’équipe</h2>
+        <p className="text-sm text-muted-foreground">
+          Découvre les membres du BDE {team.annee}.
+        </p>
         <MembersCarousel members={team.members} />
       </section>
     </main>

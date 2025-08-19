@@ -1,7 +1,6 @@
-
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import Navbar from "@/components/Header";
+import Header from "@/components/Header";
 import AuthProvider from "@/providers/SessionProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TailwindIndicator } from "@/components/Tailwind-indicator";
@@ -22,7 +21,6 @@ export const metadata: Metadata = {
   description: "Dev by Cloug",
 };
 
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="h-full">
@@ -30,10 +28,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh h-full flex flex-col overflow-x-hidden`}
       >
         <AuthProvider>
-          <Navbar />
-          <main>
+          <Header />
+          {/* Décalage sous le header (h-14 = 56px) */}
+          <main className="flex-1 pt-14">
             {children}
           </main>
+
           <TailwindIndicator />
           <Toaster />
         </AuthProvider>

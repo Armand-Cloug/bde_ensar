@@ -21,7 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 const FormSchema = z
   .object({
     firstName: z.string().min(1, 'Veuillez saisir votre prénom').max(100),
-    name: z.string().min(1, 'Veuillez saisir votre nom').max(100),
+    lastName: z.string().min(1, 'Veuillez saisir votre nom').max(100),
     email: z.string().min(1, 'Veuillez saisir votre email').email('Email Invalide'),
     password: z
       .string()
@@ -41,7 +41,7 @@ const SignUpForm = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       firstName: '',
-      name: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -56,7 +56,7 @@ const SignUpForm = () => {
       },
       body: JSON.stringify({
         firstName: values.firstName,
-        name: values.name,
+        lastName: values.lastName,
         email: values.email,
         password: values.password,  
     })
@@ -93,7 +93,7 @@ const SignUpForm = () => {
           />
           <FormField
             control={form.control}
-            name='name'
+            name='lastName'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nom de Famille</FormLabel>

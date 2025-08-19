@@ -11,7 +11,13 @@ export default function Header() {
   const isAdmin = (session?.user as any)?.role === "admin";
 
   return (
-    <header className="sticky top-0 w-full border-b">
+    <header
+      className="
+        fixed top-0 left-0 right-0 z-50
+        border-b bg-background/80 backdrop-blur
+        supports-[backdrop-filter]:bg-background/60
+      "
+    >
       <div className="h-14 flex items-center justify-between px-4">
         {/* Gauche */}
         <div className="flex items-center gap-4">
@@ -21,13 +27,18 @@ export default function Header() {
 
         {/* Droite */}
         <div className="flex items-center gap-4">
-          <Link href="https://www.instagram.com/bde_ensar" target="_blank">
+          <Link
+            href="https://www.instagram.com/bde_ensar"
+            target="_blank"
+            aria-label="Instagram du BDE"
+            title="Instagram du BDE"
+          >
             <Instagram />
           </Link>
 
           {/* Lien Admin visible uniquement pour les admins */}
           {status === "authenticated" && isAdmin && (
-            <Link href="/admin">
+            <Link href="/admin" aria-label="Espace admin" title="Espace admin">
               <Lock />
             </Link>
           )}
