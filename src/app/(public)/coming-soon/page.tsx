@@ -1,28 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
+// app/coming-soon/page.tsx
 import Link from "next/link";
 import { Rocket, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-
-  // Pas connecté → page de connexion
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
-
-  const role = (session.user as any)?.role;
-  const isAdherent = (session.user as any)?.isAdherent;
-
-  // Connecté mais pas adhérent et pas admin → vers adhésion
-  if (role !== "admin" && !isAdherent) {
-    redirect("/adhesion");
-  }
-
-  // ✅ Autorisé
+export default function ComingSoonPage() {
   return (
     <main className="px-4 py-10 md:py-14 max-w-6xl mx-auto space-y-10">
       {/* Hero */}
@@ -77,13 +59,7 @@ export default async function Home() {
 
             <ul className="grid gap-3 text-muted-foreground md:grid-cols-2">
               <li className="rounded-lg border border-dashed p-3">
-                ✔️ Des anals pour vous, les adhérents !
-              </li>
-              <li className="rounded-lg border border-dashed p-3">
-                ✔️ Des cours pour vous, les adhérents !
-              </li>
-              <li className="rounded-lg border border-dashed p-3">
-                ✔️ Des outils et conseils pour vous, les adhérents !
+                ✔️ Plein de Nouveautés ! 
               </li>
             </ul>
 

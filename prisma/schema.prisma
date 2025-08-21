@@ -60,15 +60,17 @@ model User {
   adhesionEnd    DateTime? @map("adhesion_end")
 
   // Relations
-  accounts             Account[]
-  sessions             Session[]
-  alumniRequests       AlumniRequest[]
-  passwordResetTokens  PasswordResetToken[]
-  teamMembers          BdeTeamMember[]
-  createdEvents        Event[]
-  uploadedCourses      Cours[]
-  uploadedPhotos       GalleryPhoto[]
-  adhesions            Adhesion[]
+  accounts               Account[]
+  sessions               Session[]
+  alumniRequests         AlumniRequest[]
+  passwordResetTokens    PasswordResetToken[]
+  teamMembers            BdeTeamMember[]
+  createdEvents          Event[]
+  uploadedCourses        Cours[]
+  uploadedPhotos         GalleryPhoto[]
+  adhesions              Adhesion[]
+  internshipVisits       InternshipVisit[] @relation("UserVisits")
+  internshipSpotsCreated InternshipSpot[]  @relation("UserCreatedSpots")
  
   @@map("users")
 }
@@ -286,3 +288,47 @@ model SiteConfig {
 
   @@map("site_config")
 }
+
+model InternshipSpot {
+  id           String   @id @default(cuid())
+  title        String
+  companyName  String
+  address      String
+  city         String?
+  countryCode  String
+  countryName  String?
+  lat          Float
+  lng          Float
+  contactEmail String?
+  website      String?
+  description  String?  @db.Text
+  approved     Boolean  @default(false)
+
+  createdBy    String   @map("created_by")
+  // ← relation nommée "UserCreatedSpots"
+  createdByUser User    @relation("UserCreatedSpots", fields: [createdBy], references: [id])
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  visits       InternshipVisit[]
+
+  @@index([lat, lng])
+  @@index([countryCode])
+}
+
+model InternshipVisit {
+  id        String   @id @default(cuid())
+  spotId    String
+  userId    String?              // facultatif si on autorise des retours anonymisés
+  year      Int?
+  rating    Int?
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  spot InternshipSpot @relation(fields: [spotId], references: [id], onDelete: Cascade)
+
+  // ← relation nommée "UserVisits"
+  user User? @relation("UserVisits", fields: [userId], references: [id])
+}
+

@@ -1,6 +1,8 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer"; // ⬅️ NEW
 import AuthProvider from "@/providers/SessionProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TailwindIndicator } from "@/components/Tailwind-indicator";
@@ -28,12 +30,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh h-full flex flex-col overflow-x-hidden`}
       >
         <AuthProvider>
+          {/* Header sticky (56px) */}
           <Header />
-          {/* Décalage sous le header (h-14 = 56px) */}
-          <main className="flex-1 pt-14">
+
+          {/* Décalage sous le header pour éviter qu'il recouvre le contenu */}
+          <main id="content" className="flex-1 pt-14">
             {children}
           </main>
 
+          {/* Footer orange */}
+          <Footer />
+
+          {/* Utils */}
           <TailwindIndicator />
           <Toaster />
         </AuthProvider>

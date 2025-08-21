@@ -6,9 +6,8 @@ import { db } from "@/lib/db";
 import * as z from "zod";
 
 const Schema = z.object({
-  diplome: z.string().min(1, "Diplôme requis"),
-  anneeObtention: z.coerce.number().int().min(1900).max(2100),
-  message: z.string().max(500).optional(),
+  diplome: z.string().min(1),
+  anneeObtention: z.coerce.number().int().min(1950).max(2100),
 });
 
 export async function POST(req: Request) {
@@ -16,28 +15,28 @@ export async function POST(req: Request) {
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const userId = String(session.user.id);
-
-  const body = await req.json().catch(() => ({}));
+  const body = await req.json().catch(() => null);
   const parsed = Schema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: "Données invalides" }, { status: 400 });
   }
-  const { diplome, anneeObtention, message } = parsed.data;
+  const { diplome, anneeObtention } = parsed.data;
 
-  const existing = await db.alumniRequest.findFirst({
-    where: { userId, statut: "pending" },
+  // Empêcher les doublons en attente
+  const exists = await db.alumniRequest.findFirst({
+    where: { userId: String(session.user.id), statut: "en_attente" },
   });
-  if (existing) return NextResponse.json({ ok: true }, { status: 200 });
+  if (exists) {
+    return NextResponse.json({ ok: true }, { status: 200 });
+  }
 
   await db.alumniRequest.create({
     data: {
-      userId,
+      userId: String(session.user.id),
       diplome,
       anneeObtention,
-      // status: "pending", // si default en DB, inutile
-      // message,           // ajoute ce champ dans Prisma si tu le veux
-    } as any,
+      // statut par défaut: en_attente (défini dans Prisma)
+    },
   });
 
   return NextResponse.json({ ok: true }, { status: 201 });

@@ -16,13 +16,14 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 
-import AccountTab from '@/components/admin/tabs/AccountTab';
-import UsersTab   from '@/components/admin/tabs/UsersTab';
-import AlumniTab  from '@/components/admin/tabs/AlumniTab';
-import BdeTab     from '@/components/admin/tabs/BdeTab';
-import EventsTab  from '@/components/admin/tabs/EventsTab';
-import GalleryTab from '@/components/admin/tabs/GalleryTab';
-import AnalTab    from '@/components/admin/tabs/AnalTab';
+import AccountTab   from '@/components/admin/tabs/AccountTab';
+import UsersTab     from '@/components/admin/tabs/UsersTab';
+import AlumniTab    from '@/components/admin/tabs/AlumniTab';
+import AdherentsTab from '@/components/admin/tabs/AdherentsTab';
+import BdeTab       from '@/components/admin/tabs/BdeTab';
+import EventsTab    from '@/components/admin/tabs/EventsTab';
+import GalleryTab   from '@/components/admin/tabs/GalleryTab';
+import AnalTab      from '@/components/admin/tabs/AnalTab';
 
 export type AdminUser = {
   firstName: string | null;
@@ -41,6 +42,7 @@ const TABS = [
   { value: 'account', label: 'Mon compte' },
   { value: 'users',   label: 'Utilisateurs' },
   { value: 'alumni',  label: 'Alumnis' },
+  { value: 'adherents',  label: 'Adhérent' },
   { value: 'bde',     label: 'BDE' },
   { value: 'events',  label: 'Evenements' },
   { value: 'gallery', label: 'Gallerie' },
@@ -98,6 +100,10 @@ export default function AdminPanel({ user }: Props) {
 
         <TabsContent value="alumni">
           <AlumniTab />
+        </TabsContent>
+
+        <TabsContent value="adherents">
+          <AdherentsTab />
         </TabsContent>
 
         <TabsContent value="bde">
