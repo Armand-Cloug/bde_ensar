@@ -332,3 +332,18 @@ model InternshipVisit {
   user User? @relation("UserVisits", fields: [userId], references: [id])
 }
 
+model Partner {
+  id          String   @id @default(cuid())
+  name        String
+  logoUrl     String?      // URL vers le logo (hébergé où vous voulez pour l’instant)
+  website     String?      // lien vers le site du partenaire
+  description String?      @db.Text
+  active      Boolean  @default(true)
+  order       Int       @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([active, order])
+}
+

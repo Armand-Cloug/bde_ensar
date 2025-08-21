@@ -25,6 +25,7 @@ import EventsTab    from '@/components/admin/tabs/EventsTab';
 import GalleryTab   from '@/components/admin/tabs/GalleryTab';
 import AnalTab      from '@/components/admin/tabs/AnalTab';
 import StagesTab    from '@/components/admin/tabs/StagesTab';
+import PartnersTab  from '@/components/admin/tabs/PartnersTab';
 
 export type AdminUser = {
   firstName: string | null;
@@ -45,6 +46,7 @@ const TABS = [
   { value: 'alumni',  label: 'Alumnis' },
   { value: 'adherents',  label: 'Adhérent' },
   { value: 'bde',     label: 'BDE' },
+  { value: 'partners',     label: 'Partenariats' },
   { value: 'events',  label: 'Evenements' },
   { value: 'gallery', label: 'Gallerie' },
   { value: 'anal',    label: 'Anal' },
@@ -110,6 +112,10 @@ export default function AdminPanel({ user }: Props) {
 
         <TabsContent value="bde">
           <BdeTab />
+        </TabsContent>
+
+        <TabsContent value="partners">
+          <PartnersTab />
         </TabsContent>
 
         <TabsContent value="events">

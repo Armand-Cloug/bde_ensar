@@ -1,6 +1,7 @@
 // app/apropos/page.tsx
 import { db } from "@/lib/db";
 import MembersCarousel from "@/components/apropos/MembersCarousel";
+import PartnersMarquee from "@/components/apropos/PartnersMarquee";
 import { Sparkles } from "lucide-react";
 
 export default async function AproposPage() {
@@ -24,6 +25,13 @@ export default async function AproposPage() {
     },
   });
 
+  // Récupère les partenaires actifs (ordre perso puis alpha)
+  const partners = await db.partner.findMany({
+    where: { active: true },
+    orderBy: [{ order: "asc" }, { name: "asc" }],
+    select: { id: true, name: true, logoUrl: true, website: true },
+  });
+
   if (!team) {
     return (
       <main className="px-4 md:px-6 max-w-6xl mx-auto py-10 md:py-14">
@@ -31,13 +39,22 @@ export default async function AproposPage() {
         <p className="text-muted-foreground">
           Aucune équipe active n’a été définie pour le moment.
         </p>
+
+        {/* On peut, si tu veux, afficher les partenaires même sans équipe :
+            décommente le bloc ci-dessous */}
+        {/* {partners.length > 0 && (
+          <section className="mt-10 space-y-4">
+            <h2 className="text-2xl md:text-3xl font-semibold">Nos partenaires</h2>
+            <PartnersMarquee partners={partners} />
+          </section>
+        )} */}
       </main>
     );
   }
 
   return (
     <main className="relative px-4 md:px-6 max-w-6xl mx-auto py-10 md:py-14 space-y-10">
-      {/* Décor doux (orange) */}
+      {/* Décors doux (orange) */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-24 -left-20 h-[320px] w-[320px] rounded-full bg-orange-200/40 blur-3xl"
@@ -61,7 +78,6 @@ export default async function AproposPage() {
         <div className="grid gap-6 md:grid-cols-2 items-start">
           {/* Carte photo de groupe */}
           <div className="relative overflow-hidden rounded-2xl border bg-white shadow-sm">
-            {/* Utilise <img> si l'URL peut être externe */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={team.image ?? "/placeholder.png"}
@@ -87,6 +103,17 @@ export default async function AproposPage() {
         </p>
         <MembersCarousel members={team.members} />
       </section>
+
+      {/* Partenariats (ajout) */}
+      {partners.length > 0 && (
+        <section className="relative space-y-4">
+          <h2 className="text-2xl md:text-3xl font-semibold">Nos partenaires</h2>
+          <p className="text-sm text-muted-foreground">
+            Merci à celles et ceux qui nous soutiennent.
+          </p>
+          <PartnersMarquee partners={partners} />
+        </section>
+      )}
     </main>
   );
 }
