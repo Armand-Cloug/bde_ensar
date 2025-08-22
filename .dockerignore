@@ -1,0 +1,8 @@
+.git
+node_modules
+.next
+Dockerfile
+docker-compose.yml
+traefik/acme.json
+.env
+*.log
