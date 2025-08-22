@@ -9,7 +9,7 @@ import { CheckCircle2 } from "lucide-react";
 const benefits = [
   "Tarifs réduits sur les événements",
   "Avantages partenaires",
-  "Accès aux soirées privées",
+  "Accès aux anals du BDE",
   "Réseau & entraide",
 ];
 

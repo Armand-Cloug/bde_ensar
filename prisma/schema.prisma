@@ -117,7 +117,7 @@ model BdeTeam {
   description String   @db.Text
   image       String?
   createdAt   DateTime @default(now()) @map("created_at")
-   isActive    Boolean  @default(false) @map("is_active")
+  isActive    Boolean  @default(false) @map("is_active")
 
   // Relations
   members BdeTeamMember[]
@@ -148,6 +148,7 @@ model Event {
   location        String?
   inscriptionLink String?  @map("inscription_link")
   image           String?
+  isActive    Boolean  @default(false) @map("is_active")
   createdBy       String   @map("created_by")
   createdAt       DateTime @default(now()) @map("created_at")
 

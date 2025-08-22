@@ -47,3 +47,6 @@ COPY --from=builder /app/public ./public
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --retries=10 CMD curl -fsS http://localhost:3000/ || exit 1
 CMD ["node", "server.js"]
+
+RUN mkdir -p /app/Upload && chown -R node:node /app
+USER node

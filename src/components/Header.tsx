@@ -18,7 +18,7 @@ export default function Header() {
         supports-[backdrop-filter]:bg-background/60
       "
     >
-      <div className="h-14 flex items-center justify-between px-4">
+      <div className="h-14 flex items-center justify-between px-4 bg-gradient-to-b from-orange-50 via-orange-100 to-orange-150 border border-orange-200/60">
         {/* Gauche */}
         <div className="flex items-center gap-4">
           <MainNav />

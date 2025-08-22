@@ -8,7 +8,7 @@ const stats = [
   { label: "Capitale des Assurances", value: "Niort Tech" },
   { label: "Ecosystème startup", value: "Forte dynamique" },
   { label: "Vie étudiante", value: "Cool & abordable" },
-  { label: "Accès 🛤️", value: "TGV & A10" },
+  { label: "Accès", value: "TGV & A10" },
 ];
 
 export default function NiortSection() {

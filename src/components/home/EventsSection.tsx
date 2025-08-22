@@ -7,10 +7,10 @@ import { Calendar, MapPin } from "lucide-react";
 
 const sampleEvents = [
   { title: "Soirée d’intégration", date: "Septembre", place: "Niort" },
-  { title: "Tournoi esport", date: "Octobre", place: "Campus" },
-  { title: "Afterwork partenaires", date: "Novembre", place: "Tiers-Lieu" },
-  { title: "Gala d’hiver", date: "Décembre", place: "Centre-ville" },
-  { title: "Hackathon", date: "Février", place: "ENSAR" },
+  { title: "WEI", date: "Septembre", place: "Domaine Privé" },
+  { title: "Color Campus", date: "Septembre", place: "Campus" },
+  { title: "Repas de Noël", date: "Décembre", place: "Campus" },
+  { title: "Gala de passation", date: "Février", place: "Campus" },
 ];
 
 export default function EventsSection() {

@@ -8,18 +8,18 @@ import { GraduationCap, BookOpenCheck, Rocket } from "lucide-react";
 const formations = [
   {
     icon: GraduationCap,
-    title: "Cycle Ingénieur",
-    lines: ["Systèmes d’info", "Data & IA", "Cyber & Cloud"],
+    title: "Diplome d'Ingénieur",
+    lines: ["Sciende de la donnée", "Gestion des risque QSE", "Gestion des risque SSI"],
   },
   {
     icon: BookOpenCheck,
-    title: "Licences & Masters",
-    lines: ["Dév & DevOps", "UX/UI & Produit", "Business Tech"],
+    title: "Master SI",
+    lines: ["Risk Manager", "Préventeur", "Alternance & Stage"],
   },
   {
     icon: Rocket,
-    title: "Projets & Alternances",
-    lines: ["Rythmes adaptés", "Entreprise partenaire", "Insertion rapide"],
+    title: "Master Actuariat",
+    lines: ["Responsable d’études actuarielles", "Technicien(ne) d’actuariat", "Alternance & Stage"],
   },
 ];
 
