@@ -2,11 +2,14 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer"; // ⬅️ NEW
+import Footer from "@/components/Footer";
 import AuthProvider from "@/providers/SessionProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TailwindIndicator } from "@/components/Tailwind-indicator";
 import { Toaster } from "@/components/ui/toaster";
+
+// ⬇️ NEW
+import PingHousekeeping from "@/components/PingHousekeeping";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           {/* Header sticky (56px) */}
           <Header />
+
+          {/* ⬇️ NEW: ping une fois/jour pour lancer le sweep inactivité */}
+          <PingHousekeeping />
 
           {/* Décalage sous le header pour éviter qu'il recouvre le contenu */}
           <main id="content" className="flex-1 pt-14">

@@ -89,3 +89,11 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Leaflet sous les modales (shadcn) */
+.leaflet-container { z-index: 0; }
+.leaflet-control-container { z-index: 20 !important; }
+
+/* Au cas où : surélève tous les contenus de Dialog shadcn */
+[data-radix-dialog-content] { z-index: 2000 !important; }
+

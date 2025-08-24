@@ -41,23 +41,26 @@ model Session {
 }
  
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  firstName      String?
-  lastName       String?
-  email          String?   @unique
-  emailVerified  DateTime? @map("email_verified")
-  password       String?
-  createdAt      DateTime  @default(now())    
-  image          String?
-  promotion      String?
-  birthdate      DateTime?
-  company        String?
-  role           String    @default("utilisateur") @map("role")
-  isAdherent     Boolean   @default(false) @map("is_adherent")
-  isAlumni       Boolean   @default(false) @map("is_alumni")
-  adhesionStart  DateTime? @map("adhesion_start")
-  adhesionEnd    DateTime? @map("adhesion_end")
+  id                String    @id @default(cuid())
+  name              String?
+  firstName         String?
+  lastName          String?
+  email             String?   @unique
+  emailVerified     DateTime? @map("email_verified")
+  password          String?
+  createdAt         DateTime  @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt    @map("updated_at")    
+  image             String?
+  promotion         String?
+  birthdate         DateTime?
+  company           String?
+  role              String    @default("utilisateur") @map("role")
+  isAdherent        Boolean   @default(false) @map("is_adherent")
+  isAlumni          Boolean   @default(false) @map("is_alumni")
+  adhesionStart     DateTime? @map("adhesion_start")
+  adhesionEnd       DateTime? @map("adhesion_end")
+  lastLoginAt      DateTime?  @map("last_login_at")        // nullable
+  inactiveWarnedAt DateTime?  @map("inactive_warned_at")   // nullable
 
   // Relations
   accounts               Account[]
@@ -337,11 +340,11 @@ model InternshipVisit {
 model Partner {
   id          String   @id @default(cuid())
   name        String
-  logoUrl     String?      // URL vers le logo (hébergé où vous voulez pour l’instant)
-  website     String?      // lien vers le site du partenaire
-  description String?      @db.Text
+  logoUrl     String?  // URL vers le logo (hébergé où vous voulez pour l’instant)
+  website     String?  // lien vers le site du partenaire
+  description String?  @db.Text
   active      Boolean  @default(true)
-  order       Int       @default(0)
+  order       Int      @default(0)
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -349,3 +352,10 @@ model Partner {
   @@index([active, order])
 }
 
+model JobState {
+  key       String   @id
+  lastRunAt DateTime?
+  lockedAt  DateTime?
+  lockedBy  String?
+  @@map("job_state")
+}

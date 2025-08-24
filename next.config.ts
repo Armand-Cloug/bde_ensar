@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   output: "standalone",
 
   reactStrictMode: true,
-  swcMinify: true,
   poweredByHeader: false,
   compress: true,
 

@@ -1,4 +1,5 @@
 // components/stages/SpotForm.tsx
+// Used in AdminPanel
 "use client";
 
 import * as React from "react";

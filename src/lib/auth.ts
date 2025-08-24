@@ -11,6 +11,16 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   pages: { signIn: "/sign-in" },
+  events: {
+    async signIn({ user }) {
+      try {
+        await db.user.update({
+          where: { id: String(user.id) },
+          data: { lastLoginAt: new Date() },
+        });
+      } catch (_) {/* noop */}
+    },
+  },
 
   providers: [
     GoogleProvider({
