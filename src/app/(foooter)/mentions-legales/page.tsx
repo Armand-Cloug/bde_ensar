@@ -4,18 +4,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Sparkles, Library, Scale, AtSign, Globe } from "lucide-react";
 
 const ORG = {
-  name: "BDE ENSAR",                 // [À compléter si autre]
-  legalForm: "[À compléter]",        // ex. "Association loi 1901" ou "SAS"
-  capital: "[À compléter]",          // ex. "Capital social : 1 000 €" (si société) / sinon retirer
-  siren: "[À compléter]",            // ex. "SIREN : 123 456 789"
-  rcs: "[À compléter]",              // ex. "RCS Rennes 123 456 789"
-  address: "[À compléter]",          // ex. "xx rue, 35000 Rennes, France"
+  name: "BDE ENSAR",                           
+  legalForm: "Association loi de 1901",       
+  capital: "Non renseigné",                    
+  siren: "433244506",                    
+  rcs: "Non renseigné",                      
+  address: "11 RUE ARCHIMEDE 79000 NIORT",                 
   email: "bde.ensar.contact@gmail.com",
-  phone: "[À compléter]",            // ex. "+33 x xx xx xx xx"
-  director: "[À compléter]",         // Directeur·rice de la publication
-  hostName: "[À compléter]",         // Hébergeur (ex. Vercel / OVH / Scaleway…)
-  hostAddress: "[À compléter]",      // Adresse de l’hébergeur
-  hostContact: "[À compléter]"       // URL/phone/email de l’hébergeur
+  phone: "06.47.07.34.58",              
+  director: "Alexis Ramsahai",        
+  hostName: "OVH",         
+  hostAddress: "2, rue Kellermann, 59100 Roubaix",      
+  hostContact: "https://help.ovhcloud.com/csm/fr-home?id=csm_index"      
 };
 
 export default function MentionsLegalesPage() {
@@ -61,8 +61,8 @@ export default function MentionsLegalesPage() {
               <li><strong>Statut juridique :</strong> {ORG.legalForm}</li>
               {ORG.capital !== "[À compléter]" && <li><strong>Capital :</strong> {ORG.capital}</li>}
               <li><strong>SIREN / RCS :</strong> {ORG.siren} {ORG.rcs !== "[À compléter]" ? `— ${ORG.rcs}` : ""}</li>
-              <li><strong>Email :</strong> {ORG.address}</li>
-              <li><strong>Adresse :</strong> <a href={`mailto:${ORG.email}`} className="hover:underline">{ORG.email}</a></li>
+              <li><strong>Email :</strong> <a href={`mailto:${ORG.address}`} className="hover:underline">{ORG.email}</a></li>
+              <li><strong>Adresse : </strong>{ORG.address}</li>
               <li><strong>Téléphone :</strong> {ORG.phone}</li>
               <li><strong>Directeur·rice de la publication :</strong> {ORG.director}</li>
             </ul>

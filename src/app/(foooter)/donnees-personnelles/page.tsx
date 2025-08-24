@@ -7,9 +7,9 @@ import { ShieldCheck, Sparkles, FileText, Lock, Cookie } from "lucide-react";
 const ORG = {
   name: "BDE ENSAR",
   controllerEmail: "bde.ensar.contact@gmail.com", // contact RGPD
-  dpoName: "[À compléter]",                       // si DPO formel, sinon indique "Référent RGPD"
-  dpoEmail: "[À compléter]",
-  postalAddress: "[À compléter]",                 // adresse postale
+  dpoName: "Référent RGDP du BDE",                       // si DPO formel, sinon indique "Référent RGPD"
+  dpoEmail: "bde.ensar.contact@gmail.com",
+  postalAddress: "11 RUE ARCHIMEDE 79000 NIORT",                 // adresse postale
 };
 
 export default function PrivacyPage() {
@@ -71,8 +71,8 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-5 text-muted-foreground space-y-1">
               <li>Gestion des comptes et authentification (email/mot de passe, Google).</li>
               <li>Gestion des adhésions (paiement Stripe), de la vie associative et des événements.</li>
-              <li>Communication directe (emails transactionnels) et, si consentement, newsletters.</li>
-              <li>Amélioration du site et statistiques d’audience (si cookies/traceurs).</li>
+              <li>Communication directe (emails transactionnels).</li>
+              <li>Amélioration du site et statistiques d’audience.</li>
               <li>Sécurité, prévention de la fraude, journalisation technique.</li>
             </ul>
           </CardContent>
@@ -84,7 +84,6 @@ export default function PrivacyPage() {
               <li>Exécution d’un contrat (création de compte, adhésion, participation à un événement).</li>
               <li>Obligations légales (facturation/comptabilité).</li>
               <li>Intérêt légitime (sécurité, lutte contre la fraude, amélioration du service).</li>
-              <li>Consentement (newsletters, cookies non essentiels, mesure d’audience non exonérée).</li>
             </ul>
           </CardContent>
         </Card>
@@ -98,9 +97,9 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-5 text-muted-foreground space-y-1">
               <li>Identité (prénom, nom), coordonnées (email), photo de profil (si fournie).</li>
               <li>Données de vie associative (promotion, adhésion, rôle, alumni).</li>
-              <li>Données de paiement (via Stripe — jetons/identifiants techniques, pas d’IBAN stocké chez nous).</li>
+              <li>Données de paiement (via Stripe — jetons/identifiants techniques, pas de CB stocké chez nous).</li>
               <li>Données de connexion et de sécurité (logs techniques, horodatages).</li>
-              <li>Préférences (consentement cookies, abonnements).</li>
+              <li>Préférences.</li>
             </ul>
           </CardContent>
         </Card>
@@ -109,9 +108,9 @@ export default function PrivacyPage() {
             <h3 className="text-lg md:text-xl font-semibold">Destinataires</h3>
             <ul className="list-disc pl-5 text-muted-foreground space-y-1">
               <li>Équipe du BDE, habilitée et soumise à obligation de confidentialité.</li>
-              <li>Sous-traitants techniques : hébergeur, prestataires email, outils analytiques.</li>
+              <li>Sous-traitants techniques : hébergeur.</li>
               <li>Prestataire de paiement : Stripe (traitement des paiements).</li>
-              <li>Prestataires d’authentification sociale : Google (si utilisé).</li>
+              <li>Prestataires d’authentification sociale : Google.</li>
             </ul>
           </CardContent>
         </Card>
@@ -132,10 +131,8 @@ export default function PrivacyPage() {
           <CardContent className="p-6 md:p-8 space-y-2">
             <h3 className="text-lg md:text-xl font-semibold">Durées de conservation</h3>
             <ul className="list-disc pl-5 text-muted-foreground space-y-1">
-              <li>Compte utilisateur : durée d’utilisation du compte + 3 ans d’archivage inactif.</li>
-              <li>Données d’adhésion et pièces comptables : selon obligations légales (jusqu’à 10 ans).</li>
-              <li>Logs techniques et sécurité : quelques mois au plus, sauf obligation légale.</li>
-              <li>Cookies/traceurs : selon leur finalité (voir Politique cookies).</li>
+              <li>Compte utilisateur : durée d’utilisation du compte + 2 ans avant supreession.</li>
+              <li>Logs techniques et sécurité : 6 mois, sauf obligation légale.</li>
             </ul>
           </CardContent>
         </Card>
@@ -150,7 +147,7 @@ export default function PrivacyPage() {
               Vous disposez des droits d’accès, de rectification, d’effacement, d’opposition, de limitation,
               et de portabilité lorsque c’est applicable. Pour les exercer, écrivez-nous à&nbsp;
               <a className="text-orange-600 hover:underline" href={`mailto:${ORG.controllerEmail}`}>{ORG.controllerEmail}</a>
-              {ORG.dpoEmail !== "[À compléter]" ? <> ou <a className="text-orange-600 hover:underline" href={`mailto:${ORG.dpoEmail}`}>{ORG.dpoEmail}</a></> : null}.
+              {ORG.dpoEmail !== "[À compléter]"}.
               Vous pouvez également introduire une réclamation auprès de la CNIL.
             </p>
           </CardContent>

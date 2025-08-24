@@ -21,12 +21,12 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/accessibilite" className="underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded">
+              <Link href="/coming-soon" className="underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded">
                 Accessibilité
               </Link>
             </li>
             <li>
-              <Link href="/plan-du-site" className="underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded">
+              <Link href="/coming-soon" className="underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded">
                 Plan du site
               </Link>
             </li>
@@ -38,7 +38,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <p className="mt-3 md:mt-2 text-xs md:text-sm text-white/90 text-center"> {/* ⬅️ mt-4 -> mt-3/md:mt-2 */}
-          © {year} BDE ENSAR — Tous droits réservés
+          © {year} BDE ENSAR — Tous droits réservés — By <Link href="https://github.com/Armand-Cloug" className="underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 rounded" target="_blank">Cloug</Link>
         </p>
       </div>
     </footer>
