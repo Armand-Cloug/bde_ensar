@@ -1,12 +1,13 @@
-// components/admin/tabs/AdherentsTab.tsx
 'use client';
 
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { DataTableServer } from './users/data-table-server';
 import { columns, type AdherentRow } from './adherents/columns';
+import AddAdherentDialog from './adherents/AddAdherentDialog';
+import ResetAdherentsButton from './adherents/ResetAdherentsButton';
 
-// petit helper déjà utilisé ailleurs
 function useDebounced<T>(value: T, delay = 300) {
   const [debounced, setDebounced] = React.useState(value);
   React.useEffect(() => {
@@ -19,64 +20,54 @@ function useDebounced<T>(value: T, delay = 300) {
 export default function AdherentsTab() {
   const [data, setData] = React.useState<AdherentRow[]>([]);
   const [loading, setLoading] = React.useState(true);
-
   const [q, setQ] = React.useState('');
   const [page, setPage] = React.useState(1);
   const pageSize = 15;
   const [total, setTotal] = React.useState(0);
+  const [openAdd, setOpenAdd] = React.useState(false);
 
-  // reset page quand on lance une nouvelle recherche
   React.useEffect(() => setPage(1), [q]);
   const qDebounced = useDebounced(q, 350);
 
-  React.useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      setLoading(true);
-      try {
-        const url = `/api/admin/adherents?q=${encodeURIComponent(qDebounced)}&page=${page}&pageSize=${pageSize}`;
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) throw new Error('fetch adherents failed');
-
-        const json = await res.json();
-
-        const rows: AdherentRow[] = (json?.adherents ?? []).map((u: any) => {
-          const end = u.adhesionEnd ? new Date(u.adhesionEnd) : null;
-          const now = new Date();
-          const status: 'actif' | 'expiré' =
-            end && end.getTime() >= now.getTime() ? 'actif' : 'expiré';
-
-          return {
-            id: String(u.id),
-            firstName: u.firstName ?? null,
-            lastName: u.lastName ?? null,
-            email: u.email ?? null,
-            adhesionStart: u.adhesionStart ?? null,
-            adhesionEnd: u.adhesionEnd ?? null,
-            status,
-          };
-        });
-
-        if (!cancelled) {
-          setData(rows);
-          setTotal(json?.total ?? rows.length);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+  const load = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const url = `/api/admin/adherents?q=${encodeURIComponent(qDebounced)}&page=${page}&pageSize=${pageSize}`;
+      const res = await fetch(url, { cache: 'no-store' });
+      const json = await res.json();
+      const rows: AdherentRow[] = (json?.adherents ?? []).map((u: any) => {
+        const end = u.adhesionEnd ? new Date(u.adhesionEnd) : null;
+        const now = new Date();
+        const status: 'actif' | 'expiré' = end && end.getTime() >= now.getTime() ? 'actif' : 'expiré';
+        return {
+          id: String(u.id),
+          firstName: u.firstName ?? null,
+          lastName: u.lastName ?? null,
+          email: u.email ?? null,
+          adhesionStart: u.adhesionStart ?? null,
+          adhesionEnd: u.adhesionEnd ?? null,
+          status,
+        };
+      });
+      setData(rows);
+      setTotal(json?.total ?? rows.length);
+    } finally {
+      setLoading(false);
     }
+  }, [qDebounced, page]);
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [qDebounced, page]); // pageSize constant
+  React.useEffect(() => { load(); }, [load]);
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <CardTitle>Adhérents</CardTitle>
+        <div className="flex flex-wrap gap-2">
+          <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => setOpenAdd(true)}>
+            Ajouter un adhérent
+          </Button>
+          <ResetAdherentsButton onDone={load} />
+        </div>
       </CardHeader>
       <CardContent>
         <DataTableServer
@@ -92,6 +83,8 @@ export default function AdherentsTab() {
           onNext={() => setPage((p) => (p * pageSize >= total ? p : p + 1))}
         />
       </CardContent>
+
+      <AddAdherentDialog open={openAdd} onOpenChange={setOpenAdd} onAdded={load} />
     </Card>
   );
 }

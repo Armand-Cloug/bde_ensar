@@ -1,0 +1,12 @@
+{
+  "name": "BDE ENSAR — Campus de Niort",
+  "short_name": "BDE ENSAR",
+  "start_url": "/",
+  "display": "standalone",
+  "lang": "fr-FR",
+  "theme_color": "#f97316",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "32x32",  "type": "image/png" }
+  ]
+}
