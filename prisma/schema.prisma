@@ -177,6 +177,7 @@ model GalleryEvent {
   id          String   @id @default(cuid())
   title       String
   description String?  @db.Text
+  isActive    Boolean  @default(false) @map("is_active")
   coverImage  String?  @map("cover_image")
   createdAt   DateTime @default(now()) @map("created_at")
 

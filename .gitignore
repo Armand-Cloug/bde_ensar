@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Gallery & media uploads (kept out of git)
+public/upload/**
+!public/upload/.gitkeep
