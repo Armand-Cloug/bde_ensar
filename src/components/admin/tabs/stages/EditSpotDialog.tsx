@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import type { Resolver } from "react-hook-form";
+import type { Resolver } from 'react-hook-form';
 
 const Schema = z.object({
   title: z.string().min(2),
@@ -31,6 +31,8 @@ const Schema = z.object({
   description: z.string().max(2000).optional().nullable(),
 });
 
+type FormValues = z.infer<typeof Schema>;
+
 type Props = {
   spotId: string;
   open: boolean;
@@ -42,31 +44,33 @@ export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: 
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
 
-  const form = useForm({
-    resolver: zodResolver(Schema),
+  // ⚠️ important: typer useForm, et caster le resolver si nécessaire
+  const resolver = zodResolver(Schema) as unknown as Resolver<FormValues>;
+  const form = useForm<FormValues>({
+    resolver,
     defaultValues: {
-      title: "",
-      companyName: "",
-      address: "",
-      city: "",
-      countryCode: "FR",
-      countryName: "France",
+      title: '',
+      companyName: '',
+      address: '',
+      city: '',
+      countryCode: 'FR',
+      countryName: 'France',
       lat: 0,
       lng: 0,
-      website: "",
-      contactEmail: "",
-      description: "",
+      website: '',
+      contactEmail: '',
+      description: '',
     },
   });
 
-  // Charge la fiche complète à l’ouverture
   React.useEffect(() => {
     if (!open) return;
     (async () => {
       try {
         const res = await fetch(`/api/internships/spots/${spotId}`, { cache: 'no-store' });
         const json = await res.json();
-        const s = json?.spot ?? json; // compatible avec différentes réponses
+        const s = json?.spot ?? json;
+
         form.reset({
           title: s.title ?? '',
           companyName: s.companyName ?? '',
@@ -88,7 +92,7 @@ export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, spotId]);
 
-  const onSubmit = async (values: z.infer<typeof Schema>) => {
+  const onSubmit = async (values: FormValues) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/internships/spots/${spotId}`, {
@@ -107,6 +111,14 @@ export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: 
     }
   };
 
+  // helper pour les inputs number: convertit "" → undefined, sinon Number
+  const toNumberChange =
+    (onChange: (v: number | undefined) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const v = e.target.value;
+      onChange(v === '' ? undefined : Number(v));
+    };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
@@ -117,42 +129,119 @@ export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-4">
             <FormField name="title" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Titre</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Titre</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="companyName" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Entreprise / Asso</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Entreprise / Asso</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="address" control={form.control} render={({ field }) => (
-              <FormItem className="md:col-span-2"><FormLabel>Adresse</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem className="md:col-span-2">
+                <FormLabel>Adresse</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="city" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Ville</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Ville</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="countryCode" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Pays (code ISO-2)</FormLabel><FormControl><Input placeholder="FR" {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Pays (code ISO-2)</FormLabel>
+                <FormControl>
+                  <Input placeholder="FR" {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="countryName" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Nom du pays</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Nom du pays</FormLabel>
+                <FormControl>
+                  <Input {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="lat" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Latitude</FormLabel><FormControl><Input type="number" step="any" {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Latitude</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="any"
+                    {...field}
+                    onChange={toNumberChange(field.onChange)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="lng" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Longitude</FormLabel><FormControl><Input type="number" step="any" {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Longitude</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="any"
+                    {...field}
+                    onChange={toNumberChange(field.onChange)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="website" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Site web</FormLabel><FormControl><Input placeholder="https://..." {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Site web</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://..." {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="contactEmail" control={form.control} render={({ field }) => (
-              <FormItem><FormLabel>Email public</FormLabel><FormControl><Input placeholder="contact@..." {...field} /></FormControl><FormMessage/></FormItem>
-            )}/>
+              <FormItem>
+                <FormLabel>Email public</FormLabel>
+                <FormControl>
+                  <Input placeholder="contact@..." {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
             <FormField name="description" control={form.control} render={({ field }) => (
               <FormItem className="md:col-span-2">
                 <FormLabel>Description (publique)</FormLabel>
-                <FormControl><Textarea rows={3} {...field} /></FormControl>
-                <FormMessage/>
+                <FormControl>
+                  <Textarea
+                    rows={3}
+                    {...field}
+                    value={field.value ?? ''}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
-            )}/>
+            )} />
             <div className="md:col-span-2 flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Annuler
