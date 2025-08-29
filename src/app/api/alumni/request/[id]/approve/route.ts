@@ -1,16 +1,14 @@
 // app/api/admin/alumni/requests/[id]/approve/route.ts
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-// Le littéral du segment doit correspondre au chemin sous /app
 export async function PATCH(
-  _req: NextRequest,
-  ctx: RouteContext<"/api/admin/alumni/requests/[id]/approve">
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await ctx.params; // params est un Promise en Next 15
+  const { id } = await params;
 
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any).role !== "admin") {
@@ -23,14 +21,8 @@ export async function PATCH(
   }
 
   await db.$transaction([
-    db.alumniRequest.update({
-      where: { id },
-      data: { statut: "valide" },
-    }),
-    db.user.update({
-      where: { id: req.userId },
-      data: { isAlumni: true },
-    }),
+    db.alumniRequest.update({ where: { id }, data: { statut: "valide" } }),
+    db.user.update({ where: { id: req.userId }, data: { isAlumni: true } }),
   ]);
 
   return NextResponse.json({ ok: true });
