@@ -16,7 +16,7 @@ export async function GET() {
   });
 
   return NextResponse.json({
-    teams: teams.map(t => ({
+    teams: teams.map((t: any) => ({
       id: t.id,
       annee: t.annee,
       description: t.description,
