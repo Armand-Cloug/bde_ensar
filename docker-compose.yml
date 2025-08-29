@@ -41,6 +41,8 @@ services:
         condition: service_healthy
     labels:
       - traefik.enable=true
+      # Network Proxy
+      - traefik.docker.network=app_src_proxy   # <<< important
       # HTTPS (domain principal)
       - traefik.http.routers.app.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.app.entrypoints=websecure
