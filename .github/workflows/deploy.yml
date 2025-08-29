@@ -46,9 +46,9 @@ jobs:
       # 2) Sanity SSH : vérifie l’accès avant SCP/SSH
       - name: Sanity SSH (whoami@server)
         run: |
-          ssh -o StrictHostKeyChecking=accept-new -i ./id_ci \
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ci \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-              "echo OK && whoami && hostname"
+              "echo OK && whoami && hostname && test -d ~/.ssh && echo HAS_.ssh || echo NO_.ssh"
 
       # 3) Upload du projet vers le serveur (~/app)
       - name: Upload project to server
