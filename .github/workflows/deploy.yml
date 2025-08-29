@@ -180,9 +180,23 @@ jobs:
               echo
             } >> .env
 
-            echo "[4/6] Démarrage stack (Traefik + Next.js + MariaDB)"
+            echo "[4/6] Démarrage Traefik + DB"
             sudo docker compose down || true
-            sudo docker compose up -d --build
+            sudo docker compose up -d traefik db
+            
+            echo "[4b/6] Attente santé MariaDB"
+            for i in {1..60}; do
+              state=$(sudo docker inspect --format='{{json .State.Health.Status}}' mariadb 2>/dev/null || echo "null")
+              echo "Health mariadb: $state"
+              if [ "$state" = "\"healthy\"" ]; then
+                echo "✅ MariaDB healthy"
+                break
+              fi
+              sleep 2
+            done
+            
+            echo "[4c/6] Démarrage de l'app web"
+            sudo docker compose up -d --build web
 
             echo "[5/6] (Option) Migrations Prisma si prisma/ existe"
             if [ -d "prisma" ]; then
