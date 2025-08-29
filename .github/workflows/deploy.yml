@@ -50,7 +50,7 @@ jobs:
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "echo OK && whoami && hostname && test -d ~/.ssh && echo HAS_.ssh || echo NO_.ssh"
 
-      # 3) Upload du projet vers le serveur (~/app)
+      # 3) Upload du projet vers le serveur (~/app_src)
       - name: Upload project to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -58,7 +58,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "."
-          target: "~/app"
+          target: "~/app_src"
           overwrite: true
           timeout: 120s
 
@@ -85,8 +85,8 @@ jobs:
 
             echo "[2/6] Préparation dossier projet"
             cd ~
-            mkdir -p app
-            cd app
+            mkdir -p app_src
+            cd app_src
 
             echo "[3/6] Génération du .env côté serveur"
             rm -f .env
