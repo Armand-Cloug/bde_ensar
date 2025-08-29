@@ -37,7 +37,7 @@ export default async function GalleryListPage() {
         <p className="text-sm text-muted-foreground">Aucun album actif pour le moment.</p>
       ) : (
         <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {events.map((ev) => {
+          {events.map((ev: any) => {
             const cover = ev.coverImage || ev.photos[0]?.imagePath || '';
             return (
               <Link
