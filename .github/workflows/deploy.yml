@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: {}  # Permet de cliquer "Run workflow" à la main
+  workflow_dispatch: {}
 
 concurrency:
   group: production-deploy
@@ -17,13 +17,44 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # === NOUVEAU : pré-vérifs pour éviter les faux positifs ===
+      - name: Check required secrets
+        run: |
+          set -e
+          test -n "${SERVER_HOST}" || (echo "❌ Missing SERVER_HOST" && exit 1)
+          test -n "${SERVER_USER}" || (echo "❌ Missing SERVER_USER" && exit 1)
+          test -n "${SERVER_SSH_KEY}" || (echo "❌ Missing SERVER_SSH_KEY" && exit 1)
+          echo "✅ Secrets présents"
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Write SSH key file
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ci
+          chmod 600 ~/.ssh/id_ci
+
+      - name: Sanity SSH (whoami@server)
+        run: |
+          # Si vous avez un secret SERVER_HOST_FINGERPRINT, vous pouvez faire :
+          # ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
+          #     -i ~/.ssh/id_ci ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo OK && whoami && hostname"
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ci \
+              ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+              "echo OK && whoami && hostname && test -d ~/.ssh && echo HAS_.ssh || echo NO_.ssh"
+        # Si la clé a une passphrase, ajoutez ce secret et décommentez (actions SSH ne la lisent pas ici)
+
       # 1) Transfert des fichiers du repo vers le serveur (dans ~/app)
       - name: Upload project to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key_path: ~/.ssh/id_ci
+          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}       # (optionnel si votre clé est protégée)
+          # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}    # (optionnel, recommandé si connu)
           source: "."
           target: "~/app"
           overwrite: true
@@ -35,13 +66,14 @@ jobs:
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key_path: ~/.ssh/id_ci
+          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}       # (optionnel)
+          # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}    # (optionnel)
           script: |
             set -euo pipefail
 
             echo "[1/6] Vérification / installation Docker + compose"
             if ! command -v docker >/dev/null 2>&1; then
-              # Installe Docker CE + plugin compose sur Debian 12/13
               sudo apt-get update -y
               sudo apt-get install -y ca-certificates curl gnupg
               sudo install -m 0755 -d /etc/apt/keyrings
@@ -71,7 +103,7 @@ jobs:
               echo "############################################################"
               echo "NEXTAUTH_URL=${{ vars.NEXTAUTH_URL }}"
               echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"
-              # echo "AUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  # si tu utilises Auth.js v5
+              # echo "AUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}"  # si Auth.js v5
 
               echo
               echo "############################################################"
@@ -117,14 +149,11 @@ jobs:
               echo "############################################################"
               echo "DOMAIN=${{ vars.DOMAIN }}"
               echo "TRAEFIK_ACME_EMAIL=${{ vars.TRAEFIK_ACME_EMAIL }}"
-
               echo
             } >> .env
 
             echo "[4/6] Démarrage stack (Traefik + Next.js + MariaDB)"
-            # Si un ancien déploiement tourne déjà, on le remplace proprement
             sudo docker compose down || true
-            # Build + run
             sudo docker compose up -d --build
 
             echo "[5/6] (Option) Migrations Prisma si prisma/ existe"
@@ -136,4 +165,3 @@ jobs:
             echo "[6/6] Vérification conteneurs"
             sudo docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
             echo "Déploiement terminé 🎉"
-
