@@ -94,8 +94,7 @@ jobs:
               echo "############################################################"
               echo "#                     BASE DE DONNÉES"
               echo "############################################################"
-              echo "DATABASE_URL_DEV=${{ vars.DATABASE_URL_DEV }}"
-              echo "DATABASE_URL_PROD=mysql://${{ vars.DB_USER }}:${{ secrets.DB_PASSWORD }}@db:3306/${{ vars.DB_NAME }}"
+              echo "DATABASE_URL=${{ vars.DATABASE_URL }}"
               echo
 
               echo "############################################################"

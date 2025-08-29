@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic"; // évite toute staticisation de la route
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+// lazy init Stripe
+let stripePromise: Promise<any> | null = null;
+async function getStripe() {
+  if (!stripePromise) {
+    stripePromise = (async () => {
+      const { default: Stripe } = await import("stripe");
+      const key = process.env.STRIPE_SECRET_KEY;
+      if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
+      return new Stripe(key, { apiVersion: "2025-07-30.basil" });
+    })();
+  }
+  return stripePromise;
+}
 
 // calcule le prochain 1er septembre (UTC) à partir d'une date
 function nextSeptember1(from: Date) {
@@ -35,14 +47,13 @@ export async function POST(req: Request) {
   }
 
   const body = await req.text();
+  const stripe = await getStripe();
 
-  let event: Stripe.Event;
+  let event: any; // typé par Stripe au runtime
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    const whSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!whSecret) throw new Error("STRIPE_WEBHOOK_SECRET is not set");
+    event = stripe.webhooks.constructEvent(body, sig, whSecret);
   } catch (err) {
     console.error("[STRIPE_WEBHOOK_SIGNATURE_ERROR]", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
@@ -50,16 +61,14 @@ export async function POST(req: Request) {
 
   try {
     switch (event.type) {
-      // Paiements cartes “synchro”
       case "checkout.session.completed":
-      // Paiements asynchrones (ex SEPA) une fois confirmés
       case "checkout.session.async_payment_succeeded": {
-        const session = event.data.object as Stripe.Checkout.Session;
+        const session = event.data.object as {
+          metadata?: { userId?: string };
+          customer_email?: string;
+        };
 
-        // Id utilisateur transmis en metadata depuis la création de la session
         const userId = session.metadata?.userId;
-
-        // fallback de sécurité : si pas de metadata, tenter avec l'email
         if (userId) {
           await activateAdhesion(userId);
         } else if (session.customer_email) {
@@ -71,16 +80,17 @@ export async function POST(req: Request) {
         }
         break;
       }
-
       default:
-        // pour debug :
-        // console.log("Unhandled event type:", event.type);
+        // non géré
         break;
     }
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (err) {
     console.error("[STRIPE_WEBHOOK_HANDLER_ERROR]", err);
-    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Webhook handler failed" },
+      { status: 500 }
+    );
   }
 }

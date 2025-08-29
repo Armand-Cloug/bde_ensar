@@ -1,14 +1,25 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+// lazy init Stripe
+let stripePromise: Promise<any> | null = null;
+async function getStripe() {
+  if (!stripePromise) {
+    stripePromise = (async () => {
+      const { default: Stripe } = await import("stripe");
+      const key = process.env.STRIPE_SECRET_KEY;
+      if (!key) throw new Error("STRIPE_SECRET_KEY is not set");
+      return new Stripe(key, { apiVersion: "2025-07-30.basil" });
+    })();
+  }
+  return stripePromise;
+}
 
 function getAmountCents(): number {
-  // 15 € par défaut si non défini
   const raw = process.env.STRIPE_ADHESION_PRICE_CENTS ?? "1500";
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) return 1500;
@@ -22,6 +33,7 @@ export async function POST() {
       return NextResponse.json({ error: "Auth required" }, { status: 401 });
     }
 
+    const stripe = await getStripe();
     const amount = getAmountCents();
 
     const checkout = await stripe.checkout.sessions.create({
