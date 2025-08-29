@@ -32,15 +32,16 @@ jobs:
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
 
       # 1) Écrire la clé privée DANS LE WORKSPACE (visible par les actions containerisées)
-      - name: Write SSH key file (workspace, normalize)
+      - name: Write SSH key file (normalize)
         run: |
           set -e
-          umask 177
-          printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ./id_ci
-          # Normalise CRLF -> LF si la clé a été copiée depuis Windows
-          sed -i 's/\r$//' ./id_ci
-          # Valide la clé (ne log rien)
-          ssh-keygen -y -f ./id_ci > /dev/null
+          mkdir -p ~/.ssh
+          # Écrit la clé telle quelle, puis convertit CRLF -> LF
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ci
+          sed -i 's/\r$//' ~/.ssh/id_ci
+          chmod 600 ~/.ssh/id_ci
+          # Vérifie que la clé est lisible et valide (ne log pas la clé)
+          ssh-keygen -y -f ~/.ssh/id_ci > /dev/null
 
       # 2) Sanity SSH : vérifie l’accès avant SCP/SSH
       - name: Sanity SSH (whoami@server)
@@ -56,8 +57,6 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key_path: ./id_ci
-          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}     # si ta clé est protégée
-          # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}  # optionnel, recommandé
           source: "."
           target: "~/app"
           overwrite: true
@@ -70,8 +69,6 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key_path: ./id_ci
-          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
-          # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}
           script: |
             set -euo pipefail
 
