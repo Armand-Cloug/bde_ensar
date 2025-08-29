@@ -60,10 +60,22 @@ jobs:
           script: |
             set -e
             mkdir -p ~/app_src
-            # Reprend la propriété si des fichiers appartiennent à root
             sudo chown -R "$USER":"$USER" ~/app_src || true
-            # Vide le dossier (fichiers et dotfiles : .git, etc.)
+
+            # Backup acme.json si présent
+            if [ -f ~/app_src/traefik/acme.json ]; then
+              cp ~/app_src/traefik/acme.json /tmp/acme.json.backup
+            fi
+
+            # Ménage complet
             rm -rf ~/app_src/* ~/app_src/.[!.]* ~/app_src/..?* || true
+
+            # Restore acme.json si présent
+            mkdir -p ~/app_src/traefik
+            if [ -f /tmp/acme.json.backup ]; then
+              mv /tmp/acme.json.backup ~/app_src/traefik/acme.json
+              chmod 600 ~/app_src/traefik/acme.json
+            fi
 
       # 3) Upload du projet vers le serveur (~/app_src)
       #    On n'envoie PAS les fichiers cachés (.git, etc.) pour éviter les conflits de droits
@@ -180,10 +192,21 @@ jobs:
               echo
             } >> .env
 
+            echo "[3b/6] Préparer le store ACME de Traefik"
+            mkdir -p traefik
+            # Si par erreur c'est un dossier, on le remplace par un fichier
+            if [ -d traefik/acme.json ]; then rm -rf traefik/acme.json; fi
+            # Créer le fichier s'il n'existe pas + bon chmod
+            if [ ! -f traefik/acme.json ]; then
+              install -m 600 /dev/null traefik/acme.json || { touch traefik/acme.json && chmod 600 traefik/acme.json; }
+            else
+              chmod 600 traefik/acme.json
+            fi
+            
             echo "[4/6] Démarrage Traefik + DB"
             sudo docker compose down || true
             sudo docker compose up -d traefik db
-            
+
             echo "[4b/6] Attente santé MariaDB"
             for i in {1..60}; do
               state=$(sudo docker inspect --format='{{json .State.Health.Status}}' mariadb 2>/dev/null || echo "null")
@@ -194,7 +217,7 @@ jobs:
               fi
               sleep 2
             done
-            
+
             echo "[4c/6] Démarrage de l'app web"
             sudo docker compose up -d --build web
 
