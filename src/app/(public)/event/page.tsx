@@ -52,7 +52,7 @@ export default async function EventsIndexPage() {
         <p className="text-muted-foreground">Aucun événement actif pour le moment.</p>
       ) : (
         <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {events.map((ev) => {
+          {events.map((ev: any) => {
             const slug = ev.eventPages[0]?.slug || null;
             return (
               <Card key={ev.id} className="overflow-hidden border">
