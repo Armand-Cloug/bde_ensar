@@ -12,13 +12,13 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Prod   # indispensable si tes secrets sont dans l'env "Prod"
+    environment: Prod   # important si tes secrets sont dans l'env "Prod"
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 0) Pré-vérifs
+      # 0) Pré-vérifs : échoue tôt si un secret critique manque
       - name: Check required secrets
         run: |
           set -e
@@ -31,31 +31,21 @@ jobs:
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
 
-      # 1) Écrire la clé privée dans le workspace (visible par les actions containerisées)
+      # 1) Écrire la clé privée DANS LE WORKSPACE (visible par les actions containerisées)
       - name: Write SSH key file (workspace, normalize)
         run: |
           set -e
           umask 177
-          # Écriture robuste via heredoc pour préserver les retours à la ligne
-          cat > ./id_ci << 'EOF'
-          ${{ secrets.SERVER_SSH_KEY }}
-          EOF
-          # Normalise CRLF -> LF
+          printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ./id_ci
+          # Normalise CRLF -> LF si la clé a été copiée depuis Windows
           sed -i 's/\r$//' ./id_ci
-          # Valide la clé : si passphrase fournie, on l'utilise
-          if [ -n "${SERVER_SSH_PASSPHRASE:-}" ]; then
-            ssh-keygen -y -P "${SERVER_SSH_PASSPHRASE}" -f ./id_ci > /dev/null
-          else
-            ssh-keygen -y -f ./id_ci > /dev/null
-          fi
-        env:
-          SERVER_SSH_PASSPHRASE: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          # Valide la clé (ne log rien)
+          ssh-keygen -y -f ./id_ci > /dev/null
 
-      # 2) Sanity SSH (on le saute si la clé est chiffrée par passphrase)
+      # 2) Sanity SSH : vérifie l’accès avant SCP/SSH
       - name: Sanity SSH (whoami@server)
-        if: ${{ secrets.SERVER_SSH_PASSPHRASE == '' }}
         run: |
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -i ./id_ci \
+          ssh -o StrictHostKeyChecking=accept-new -i ./id_ci \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "echo OK && whoami && hostname"
 
@@ -66,7 +56,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key_path: ./id_ci
-          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}     # vide si pas de passphrase
+          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}     # si ta clé est protégée
           # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}  # optionnel, recommandé
           source: "."
           target: "~/app"
@@ -80,7 +70,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key_path: ./id_ci
-          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          # passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
           # fingerprint: ${{ secrets.SERVER_HOST_FINGERPRINT }}
           script: |
             set -euo pipefail
