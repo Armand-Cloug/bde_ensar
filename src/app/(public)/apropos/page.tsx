@@ -1,10 +1,16 @@
 // app/apropos/page.tsx
+export const dynamic = 'force-dynamic'; // pas de SSG/ISR au build
+export const revalidate = 0;            // pas de cache statique
+import { unstable_noStore as noStore } from 'next/cache';
+
 import { db } from "@/lib/db";
 import MembersCarousel from "@/components/apropos/MembersCarousel";
 import PartnersMarquee from "@/components/apropos/PartnersMarquee";
 import { Sparkles } from "lucide-react";
 
 export default async function AproposPage() {
+  noStore(); // s'assure que la data est toujours demandée au runtime
+
   const team = await db.bdeTeam.findFirst({
     where: { isActive: true },
     include: {
@@ -25,7 +31,6 @@ export default async function AproposPage() {
     },
   });
 
-  // Récupère les partenaires actifs (ordre perso puis alpha)
   const partners = await db.partner.findMany({
     where: { active: true },
     orderBy: [{ order: "asc" }, { name: "asc" }],
