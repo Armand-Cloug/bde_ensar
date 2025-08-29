@@ -28,7 +28,7 @@ export default async function GalleryDetailPage({
     notFound();
   }
 
-  const photos = (ev.photos ?? []).map((p) => ({
+  const photos = (ev.photos ?? []).map((p: any) => ({
     src: p.imagePath,
     alt: p.caption ?? ev.title,
   }));
