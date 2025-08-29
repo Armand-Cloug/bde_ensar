@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import FormationTree from './anal/FormationTree';
 import { CreateFormationDialog } from './anal/CreateDialogs';
-import type { FormationNode } from './anal/types';
+import type { FormationNode } from './anal/type';
 
 export default function AnalTab() {
   const { toast } = useToast();
