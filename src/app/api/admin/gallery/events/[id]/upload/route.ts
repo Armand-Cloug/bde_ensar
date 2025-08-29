@@ -17,10 +17,14 @@ const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 function extFromMime(mime: string) {
   switch (mime) {
-    case "image/jpeg": return "jpg";
-    case "image/png":  return "png";
-    case "image/webp": return "webp";
-    default: return "bin";
+    case "image/jpeg":
+      return "jpg";
+    case "image/png":
+      return "png";
+    case "image/webp":
+      return "webp";
+    default:
+      return "bin";
   }
 }
 
@@ -44,14 +48,19 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: galleryEventId } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id: galleryEventId } = await params;
 
-  const event = await db.galleryEvent.findUnique({ where: { id: galleryEventId } });
-  if (!event) return NextResponse.json({ error: "Event not found" }, { status: 404 });
+  const event = await db.galleryEvent.findUnique({
+    where: { id: galleryEventId },
+  });
+  if (!event) {
+    return NextResponse.json({ error: "Event not found" }, { status: 404 });
+  }
 
   const form = await req.formData();
   const files = form.getAll("files");
@@ -62,12 +71,20 @@ export async function POST(
     return NextResponse.json({ error: "No files" }, { status: 400 });
   }
   if (files.length > MAX_FILES_PER_BATCH) {
-    return NextResponse.json({ error: `Max ${MAX_FILES_PER_BATCH} fichiers par lot` }, { status: 400 });
+    return NextResponse.json(
+      { error: `Max ${MAX_FILES_PER_BATCH} fichiers par lot` },
+      { status: 400 }
+    );
   }
 
-  const currentCount = await db.galleryPhoto.count({ where: { galleryEventId } });
+  const currentCount = await db.galleryPhoto.count({
+    where: { galleryEventId },
+  });
   if (currentCount + files.length > MAX_FILES_PER_EVENT) {
-    return NextResponse.json({ error: `Limite ${MAX_FILES_PER_EVENT} photos / événement atteinte` }, { status: 400 });
+    return NextResponse.json(
+      { error: `Limite ${MAX_FILES_PER_EVENT} photos / événement atteinte` },
+      { status: 400 }
+    );
   }
 
   const baseDir = path.join(process.cwd(), "public", "upload", galleryEventId);
@@ -78,26 +95,35 @@ export async function POST(
   const created: { id: string; imagePath: string }[] = [];
 
   for (const anyFile of files) {
-    // ⚠️ Évite instanceof File → duck-typing Blob
     if (!isBlobLike(anyFile)) continue;
 
-    // En Node, on traite comme Blob "file-like"
     const f = anyFile as Blob & { type?: string; size?: number };
     const type = (f as any).type || "application/octet-stream";
     const size = Number((f as any).size ?? 0);
 
     if (!ALLOWED_TYPES.has(type)) {
-      return NextResponse.json({ error: `Type non autorisé: ${type}` }, { status: 400 });
+      return NextResponse.json(
+        { error: `Type non autorisé: ${type}` },
+        { status: 400 }
+      );
     }
     if (size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: `Fichier trop volumineux (>25 Mo)` }, { status: 400 });
+      return NextResponse.json(
+        { error: `Fichier trop volumineux (>25 Mo)` },
+        { status: 400 }
+      );
     }
     if (currentBytes + addedBytes + size > MAX_BYTES_PER_EVENT) {
-      return NextResponse.json({ error: `Taille totale > 2 Go` }, { status: 400 });
+      return NextResponse.json(
+        { error: `Taille totale > 2 Go` },
+        { status: 400 }
+      );
     }
 
     const ext = extFromMime(type);
-    const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const safeName = `${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}.${ext}`;
     const diskPath = path.join(baseDir, safeName);
     const publicPath = path.posix.join("/upload", galleryEventId, safeName);
 

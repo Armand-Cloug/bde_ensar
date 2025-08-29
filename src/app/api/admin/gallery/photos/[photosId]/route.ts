@@ -12,19 +12,23 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ photoId: string }> }
 ) {
+  const { photoId } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { photoId } = await params;
 
   const photo = await db.galleryPhoto.findUnique({ where: { id: photoId } });
-  if (!photo) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!photo) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
-  // Chemin disque depuis imagePath (/upload/<eventId>/<file>)
-  const rel = photo.imagePath.replace(/^\/+/, ""); // enleve le "/" initial
+  // Construire le chemin disque depuis imagePath (/upload/<eventId>/<file>)
+  const rel = photo.imagePath.replace(/^\/+/, ""); // supprime le "/" initial
   const diskPath = path.join(process.cwd(), "public", rel);
 
+  // Suppression en DB + suppression du fichier physique
   await db.galleryPhoto.delete({ where: { id: photoId } });
   await rm(diskPath, { force: true });
 

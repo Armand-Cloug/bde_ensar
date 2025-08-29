@@ -8,12 +8,13 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await params;
   const body = await req.json();
   const { name, logoUrl, website, description, order, active } = body ?? {};
 
@@ -37,12 +38,14 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await params;
   await db.partner.delete({ where: { id } });
+
   return NextResponse.json({ ok: true });
 }

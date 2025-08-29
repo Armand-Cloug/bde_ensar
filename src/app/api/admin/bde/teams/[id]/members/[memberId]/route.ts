@@ -8,14 +8,18 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; memberId: string }> }
 ) {
   const { id: teamId, memberId } = await params;
+
   const session = await getServerSession(authOptions);
-  if (!session?.user || session.user.role !== "admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!session?.user || (session.user as any)?.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Optionnel : vérifier que le membre appartient bien à cette team
-  const m = await db.bdeTeamMember.findUnique({ where: { id: memberId }, select: { teamId: true } });
-  if (!m || m.teamId !== teamId) {
+  // Vérifie que le membre appartient bien à cette équipe
+  const member = await db.bdeTeamMember.findUnique({
+    where: { id: memberId },
+    select: { teamId: true },
+  });
+  if (!member || member.teamId !== teamId) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

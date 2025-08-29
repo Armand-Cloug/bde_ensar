@@ -4,7 +4,6 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// (optionnel) helper d'auth admin
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any).role !== "admin") {
@@ -20,7 +19,10 @@ export async function GET(
   const { id } = await params;
 
   const spot = await db.internshipSpot.findUnique({ where: { id } });
-  if (!spot) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!spot) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   return NextResponse.json({ spot });
 }
 
@@ -34,10 +36,7 @@ export async function PATCH(
   const { id } = await params;
   const data = await req.json();
 
-  await db.internshipSpot.update({
-    where: { id },
-    data,
-  });
+  await db.internshipSpot.update({ where: { id }, data });
 
   return NextResponse.json({ ok: true });
 }
@@ -52,5 +51,6 @@ export async function DELETE(
   const { id } = await params;
 
   await db.internshipSpot.delete({ where: { id } });
+
   return NextResponse.json({ ok: true });
 }

@@ -12,16 +12,22 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await params;
+
   const ev = await db.galleryEvent.findUnique({
     where: { id },
     include: { photos: { orderBy: { id: "desc" } } },
   });
-  if (!ev) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  if (!ev) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   return NextResponse.json({ event: ev });
 }
 
@@ -29,23 +35,29 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await params;
+
   let body: any = {};
   try {
     body = await req.json();
-  } catch {}
+  } catch {
+    // body reste vide si parsing échoue
+  }
 
   const data: any = {};
   if (typeof body.title === "string") data.title = body.title.trim();
-  if (typeof body.description === "string")
+  if (typeof body.description === "string") {
     data.description = body.description.trim() || null;
+  }
   if (typeof body.isActive === "boolean") data.isActive = body.isActive;
-  if (typeof body.coverImage === "string")
+  if (typeof body.coverImage === "string") {
     data.coverImage = body.coverImage.trim() || null;
+  }
 
   const updated = await db.galleryEvent.update({
     where: { id },
@@ -60,18 +72,18 @@ export async function DELETE(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await params;
 
-  // Supprimer en DB (photos en cascade)
+  // Supprimer en DB (photos supprimées en cascade)
   await db.galleryEvent.delete({ where: { id } });
 
-  // Supprimer les fichiers du dossier
+  // Supprimer le dossier physique lié (si existe)
   const dir = path.join(process.cwd(), "public", "upload", id);
-  // rm récursif: ok même si le dossier n'existe pas
   await rm(dir, { recursive: true, force: true });
 
   return NextResponse.json({ ok: true });

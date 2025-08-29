@@ -8,7 +8,7 @@ import { authOptions } from "@/lib/auth";
  * Génère un slug unique de type `event-xxxxxxxx` (8 chars base36).
  * On boucle jusqu'à trouver un slug absent (slug est unique en DB).
  */
-async function generateUniqueSlug() {
+async function generateUniqueSlug(): Promise<string> {
   while (true) {
     const rand = Math.random().toString(36).slice(2, 10); // 8 chars
     const slug = `event-${rand}`;
@@ -22,32 +22,37 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+
   const page = await db.eventPage.findFirst({
     where: { eventId: id },
     select: { id: true, slug: true, contentHtml: true },
   });
-  return NextResponse.json({ page }); // page peut être null si non créé
+
+  // `page` peut être null si non encore créé
+  return NextResponse.json({ page });
 }
 
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+
   const session = await getServerSession(authOptions);
   if (!session?.user || (session.user as any)?.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id } = await params;
 
   let body: any = {};
   try {
     body = await req.json();
   } catch {
-    // ignore
+    // si pas de body JSON valide → body reste {}
   }
 
-  // On attend un champ "content" (texte simple), pas de HTML ni de slug côté client
-  const content: string = typeof body?.content === "string" ? body.content : "";
+  // On attend un champ "content" (texte simple)
+  const content: string =
+    typeof body?.content === "string" ? body.content : "";
 
   if (!content.trim()) {
     return NextResponse.json(
@@ -56,7 +61,7 @@ export async function PUT(
     );
   }
 
-  // Existe déjà ?
+  // Vérifier si une page existe déjà
   const existing = await db.eventPage.findFirst({
     where: { eventId: id },
     select: { id: true, slug: true },
@@ -65,23 +70,23 @@ export async function PUT(
   if (existing) {
     await db.eventPage.update({
       where: { id: existing.id },
-      data: {
-        // On stocke le texte dans contentHtml (mal nommé mais OK)
-        contentHtml: content,
-      },
+      data: { contentHtml: content }, // stocké dans contentHtml (mal nommé mais OK)
     });
+
     return NextResponse.json({ ok: true, slug: existing.slug });
-  } else {
-    // Créer avec un slug auto-unique
-    const slug = await generateUniqueSlug();
-    await db.eventPage.create({
-      data: {
-        eventId: id,
-        slug,
-        contentHtml: content,
-        contentJson: null,
-      },
-    });
-    return NextResponse.json({ ok: true, slug });
   }
+
+  // Sinon → créer avec un slug auto-unique
+  const slug = await generateUniqueSlug();
+
+  await db.eventPage.create({
+    data: {
+      eventId: id,
+      slug,
+      contentHtml: content,
+      contentJson: null,
+    },
+  });
+
+  return NextResponse.json({ ok: true, slug });
 }
