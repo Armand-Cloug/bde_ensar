@@ -43,7 +43,7 @@ export async function POST() {
   });
 
   // Compose le fichier texte (Nom Prénom — email)
-  const lines = adherents.map((u) => {
+  const lines = adherents.map((u: any) => {
     const name = `${u.lastName ?? ""} ${u.firstName ?? ""}`.trim() || "(sans nom)";
     const email = u.email ?? "(sans email)";
     return `${name} — ${email}`;
