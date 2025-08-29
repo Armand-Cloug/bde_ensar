@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MoreHorizontal, FileDown } from 'lucide-react';
 
 import { CreateSemestreDialog, CreateUeDialog, CreateMatiereDialog, CreateCoursDialog } from './CreateDialogs';
-import type { FormationNode, SemestreNode, UeNode, MatiereNode, CoursNode } from './types';
+import type { FormationNode, SemestreNode, UeNode, MatiereNode, CoursNode } from './type';
 import Section from './Section';
 
 /* ---------- Racine ---------- */
