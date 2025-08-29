@@ -2,15 +2,27 @@
 "use client";
 
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import type { LatLngExpression } from "leaflet";
+import {
+  MapContainer as RLMapContainer,
+  TileLayer,
+  Marker as RLMarker,
+  Popup,
+} from "react-leaflet";
 import L from "leaflet";
 import type { Spot } from "./SpotsMapClient";
+import * as React from "react";
+
+// --- Fix compat TS: versions de react-leaflet qui ne voient pas 'center' / 'icon' ---
+// On caste MapContainer et Marker en composants qui acceptent n'importe quel props.
+// Cela contourne les incompatibilités de d.ts, sans impacter le runtime.
+const MapContainer = RLMapContainer as unknown as React.FC<any>;
+const Marker = RLMarker as unknown as React.FC<any>;
+
+type LatLngTuple = [number, number];
 
 const markerIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -20,26 +32,26 @@ const markerIcon = L.icon({
 
 export default function SpotsMap({ spots = [] }: { spots?: Spot[] }) {
   const safeSpots: Spot[] = Array.isArray(spots) ? spots : [];
-  const center: LatLngExpression = [48.8566, 2.3522];
+  const center: LatLngTuple = [48.8566, 2.3522];
   const hasSpots = safeSpots.length > 0;
+
+  const mapProps = {
+    center: hasSpots
+      ? ([safeSpots[0].lat, safeSpots[0].lng] as LatLngTuple)
+      : center,
+    zoom: hasSpots ? 4 : 3,
+    className: "h-full w-full",
+    scrollWheelZoom: true,
+  };
 
   return (
     <div className="w-full">
       <div className="h-[70vh] w-full overflow-hidden rounded-xl border">
-        <MapContainer
-          center={
-            hasSpots
-              ? ([safeSpots[0].lat, safeSpots[0].lng] as LatLngExpression)
-              : center
-          }
-          zoom={hasSpots ? 4 : 3}
-          className="h-full w-full"
-          scrollWheelZoom
-        >
+        <MapContainer {...mapProps}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
           {safeSpots.map((s) => (
-            <Marker key={s.id} position={[s.lat, s.lng]} icon={markerIcon}>
+            <Marker key={s.id} position={[s.lat, s.lng] as LatLngTuple} icon={markerIcon}>
               <Popup>
                 <div className="space-y-1 max-w-[260px]">
                   <div className="font-semibold">
