@@ -19,25 +19,28 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import type { Resolver } from "react-hook-form";
 
 const Schema = z.object({
   diplome: z.string().min(1, "Diplôme requis"),
   anneeObtention: z.coerce.number().int().min(1950).max(new Date().getFullYear() + 5),
 });
-
 type FormValues = z.infer<typeof Schema>;
+
+// <- cast en unknown puis en Resolver<FormValues>
+const resolver = zodResolver(Schema) as unknown as Resolver<FormValues>;
+
+const form = useForm<FormValues>({
+  resolver,
+  defaultValues: {
+    diplome: "",
+    anneeObtention: new Date().getFullYear(),
+  },
+});
 
 export default function RequestAlumniButton({ isAlumni }: { isAlumni?: boolean }) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(Schema),              
-    defaultValues: {
-      diplome: "",
-      anneeObtention: new Date().getFullYear(),
-    },
-  });
 
   async function onSubmit(values: FormValues) {
     try {
