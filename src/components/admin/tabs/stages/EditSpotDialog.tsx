@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import type { Resolver } from "react-hook-form";
 
 const Schema = z.object({
   title: z.string().min(2),
@@ -23,8 +24,8 @@ const Schema = z.object({
   city: z.string().optional().nullable(),
   countryCode: z.string().min(2).max(2),
   countryName: z.string().optional().nullable(),
-  lat: z.preprocess((v) => Number(v), z.number().finite()),
-  lng: z.preprocess((v) => Number(v), z.number().finite()),
+  lat: z.coerce.number().min(-90).max(90),
+  lng: z.coerce.number().min(-180).max(180),
   website: z.string().url().optional().nullable(),
   contactEmail: z.string().email().optional().nullable(),
   description: z.string().max(2000).optional().nullable(),
@@ -41,20 +42,20 @@ export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: 
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
 
-  const form = useForm<z.infer<typeof Schema>>({
+  const form = useForm({
     resolver: zodResolver(Schema),
     defaultValues: {
-      title: '',
-      companyName: '',
-      address: '',
-      city: '',
-      countryCode: 'FR',
-      countryName: 'France',
+      title: "",
+      companyName: "",
+      address: "",
+      city: "",
+      countryCode: "FR",
+      countryName: "France",
       lat: 0,
       lng: 0,
-      website: '',
-      contactEmail: '',
-      description: '',
+      website: "",
+      contactEmail: "",
+      description: "",
     },
   });
 
