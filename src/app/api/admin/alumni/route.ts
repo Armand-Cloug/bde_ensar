@@ -57,7 +57,7 @@ export async function GET(req: Request) {
     }),
   ]);
 
-  const alumni = users.map(u => ({
+  const alumni = users.map((u: any) => ({
     id: String(u.id),
     firstName: u.firstName,
     lastName: u.lastName,
