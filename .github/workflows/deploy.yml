@@ -211,14 +211,15 @@ jobs:
             for i in {1..60}; do
               state=$(sudo docker inspect --format='{{json .State.Health.Status}}' mariadb 2>/dev/null || echo "null")
               echo "Health mariadb: $state"
-              if [ "$state" = "\"healthy\"" ]; then
-                echo "✅ MariaDB healthy"
-                break
-              fi
+              [ "$state" = "\"healthy\"" ] && break
               sleep 2
             done
 
-            echo "[4c/6] Démarrage de l'app web"
+            echo "[4c/6] Prisma migrate deploy (idempotent)"
+            # ❗ ÉCHOUER si la migration échoue
+            sudo docker compose run --rm web npx prisma migrate deploy
+
+            echo "[4d/6] Démarrage de l'app web (build + run)"
             sudo docker compose up -d --build web
 
             echo "[5/6] (Option) Migrations Prisma si prisma/ existe"
