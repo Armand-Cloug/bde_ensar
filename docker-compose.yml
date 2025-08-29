@@ -41,20 +41,19 @@ services:
         condition: service_healthy
     labels:
       - traefik.enable=true
-      # Network Proxy
-      - traefik.docker.network=app_src_proxy   # <<< important
-      # HTTPS (domain principal)
+      - traefik.docker.network=app_src_proxy
+      - traefik.http.services.app.loadbalancer.server.port=3000
       - traefik.http.routers.app.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.app.entrypoints=websecure
+      - traefik.http.routers.app.tls=true
       - traefik.http.routers.app.tls.certresolver=le
-      - traefik.http.services.app.loadbalancer.server.port=3000
-      # (optionnel) alias www
       - traefik.http.routers.app-www.rule=Host(`www.${DOMAIN}`)
       - traefik.http.routers.app-www.entrypoints=websecure
+      - traefik.http.routers.app-www.tls=true
       - traefik.http.routers.app-www.tls.certresolver=le
       - traefik.http.routers.app-www.service=app
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      test: ["CMD-SHELL", "curl -fsS -H \"Host: ${DOMAIN}\" http://localhost:3000/ || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 5
