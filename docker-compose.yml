@@ -53,7 +53,7 @@ services:
       - traefik.http.routers.app-www.tls.certresolver=le
       - traefik.http.routers.app-www.service=app
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:3000/ >/dev/null || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 5
