@@ -39,7 +39,7 @@ export async function GET(req: Request) {
   ]);
 
   return NextResponse.json({
-    users: users.map(u => ({ ...u, id: String(u.id) })),
+    users: users.map((u: any) => ({ ...u, id: String(u.id) })),
     total,
     page,
     pageSize: take,
