@@ -1,320 +1,153 @@
-'use client';
+// components/account/RequestAlumniButton.tsx
+"use client";
 
-import * as React from 'react';
-import * as z from 'zod';
-import { useForm, type Resolver } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import * as React from "react";
+import * as z from "zod";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 const Schema = z.object({
-  title: z.string().min(2),
-  companyName: z.string().min(2),
-  address: z.string().min(3),
-  city: z.string().optional().nullable(),
-  countryCode: z.string().min(2).max(2),
-  countryName: z.string().optional().nullable(),
-  lat: z.coerce.number().min(-90).max(90),
-  lng: z.coerce.number().min(-180).max(180),
-  website: z.string().url().optional().nullable(),
-  contactEmail: z.string().email().optional().nullable(),
-  description: z.string().max(2000).optional().nullable(),
+  diplome: z.string().min(1, "Diplôme requis"),
+  anneeObtention: z.coerce
+    .number()
+    .int()
+    .min(1950, "Année invalide")
+    .max(new Date().getFullYear() + 5, "Année trop grande"),
 });
 
 type FormValues = z.infer<typeof Schema>;
 
 type Props = {
-  spotId: string;
-  open: boolean;
-  onOpenChange: (v: boolean) => void;
-  onSaved?: () => void;
+  /** Si l’utilisateur est déjà Alumni, on désactive le bouton */
+  isAlumni?: boolean;
 };
 
-export default function EditSpotDialog({ spotId, open, onOpenChange, onSaved }: Props) {
+export default function RequestAlumniButton({ isAlumni }: Props) {
   const { toast } = useToast();
-  const [loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  // ✅ cast du resolver pour éviter le "unknown is not assignable to number"
+  // Cast du resolver pour éviter le "unknown is not assignable to number"
   const resolver = zodResolver(Schema) as unknown as Resolver<FormValues>;
 
   const form = useForm<FormValues>({
     resolver,
     defaultValues: {
-      title: '',
-      companyName: '',
-      address: '',
-      city: '',
-      countryCode: 'FR',
-      countryName: 'France',
-      lat: 0,
-      lng: 0,
-      website: '',
-      contactEmail: '',
-      description: '',
+      diplome: "",
+      anneeObtention: new Date().getFullYear(),
     },
   });
 
-  React.useEffect(() => {
-    if (!open) return;
-    (async () => {
-      try {
-        const res = await fetch(`/api/internships/spots/${spotId}`, { cache: 'no-store' });
-        const json = await res.json();
-        const s = json?.spot ?? json;
-
-        form.reset({
-          title: s.title ?? '',
-          companyName: s.companyName ?? '',
-          address: s.address ?? '',
-          city: s.city ?? '',
-          countryCode: s.countryCode ?? 'FR',
-          countryName: s.countryName ?? '',
-          lat: Number(s.lat ?? 0),
-          lng: Number(s.lng ?? 0),
-          website: s.website ?? '',
-          contactEmail: s.contactEmail ?? '',
-          description: s.description ?? '',
-        });
-      } catch {
-        toast({
-          title: 'Erreur',
-          description: 'Impossible de charger le point',
-          variant: 'destructive',
-        });
-        onOpenChange(false);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, spotId]);
-
-  const onSubmit = async (values: FormValues) => {
-    setLoading(true);
+  async function onSubmit(values: FormValues) {
     try {
-      const res = await fetch(`/api/internships/spots/${spotId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/alumni/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-      if (!res.ok) throw new Error('patch');
-      toast({ title: 'Enregistré', description: 'Le point a été mis à jour.' });
-      onOpenChange(false);
-      onSaved?.();
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        toast({
+          title: "Erreur",
+          description: j?.error ?? "Impossible d’envoyer la demande.",
+          variant: "destructive",
+        });
+        return;
+      }
+      toast({
+        title: "Demande envoyée",
+        description:
+          "Votre demande Alumni a été transmise. Vous serez notifié(e) après validation.",
+      });
+      setOpen(false);
+      form.reset();
     } catch {
       toast({
-        title: 'Erreur',
-        description: 'Mise à jour impossible',
-        variant: 'destructive',
+        title: "Erreur",
+        description: "Réseau indisponible.",
+        variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
-  };
+  }
 
-  // convertit "" → undefined, sinon Number (pour inputs type="number")
-  const toNumberChange =
-    (onChange: (v: number | undefined) => void) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const v = e.target.value;
-      onChange(v === '' ? undefined : Number(v));
-    };
+  if (isAlumni) {
+    return (
+      <Button variant="outline" disabled className="cursor-default">
+        Déjà Alumni
+      </Button>
+    );
+  }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="bg-orange-600 hover:bg-orange-700">
+          Devenir Alumni
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Modifier le point</DialogTitle>
+          <DialogTitle>Demander le statut Alumni</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-4">
-            <FormField
-              name="title"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Titre</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-4"
+          noValidate
+        >
+          <div className="grid gap-1">
+            <Label htmlFor="diplome">Diplôme</Label>
+            <Input
+              id="diplome"
+              placeholder="Ex. Ingénieur Agronome"
+              {...form.register("diplome")}
             />
-            <FormField
-              name="companyName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Entreprise / Asso</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+            {form.formState.errors.diplome && (
+              <p className="text-sm text-red-500">
+                {form.formState.errors.diplome.message}
+              </p>
+            )}
+          </div>
+
+          <div className="grid gap-1">
+            <Label htmlFor="annee">Année d’obtention</Label>
+            <Input
+              id="annee"
+              type="number"
+              inputMode="numeric"
+              // pour que RHF fournisse bien un number (pas string)
+              {...form.register("anneeObtention", { valueAsNumber: true })}
             />
-            <FormField
-              name="address"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="md:col-span-2">
-                  <FormLabel>Adresse</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="city"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Ville</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="countryCode"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pays (code ISO-2)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="FR" {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="countryName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nom du pays</FormLabel>
-                  <FormControl>
-                    <Input {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="lat"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Latitude</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      step="any"
-                      {...field}
-                      onChange={toNumberChange(field.onChange)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="lng"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Longitude</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      step="any"
-                      {...field}
-                      onChange={toNumberChange(field.onChange)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="website"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Site web</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://..." {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="contactEmail"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email public</FormLabel>
-                  <FormControl>
-                    <Input placeholder="contact@..." {...field} value={field.value ?? ''} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="description"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="md:col-span-2">
-                  <FormLabel>Description (publique)</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      rows={3}
-                      {...field}
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(e.target.value)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="md:col-span-2 flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Annuler
-              </Button>
-              <Button
-                className="bg-orange-600 hover:bg-orange-700"
-                disabled={loading}
-                type="submit"
-              >
-                Enregistrer
-              </Button>
-            </div>
-          </form>
-        </Form>
+            {form.formState.errors.anneeObtention && (
+              <p className="text-sm text-red-500">
+                {form.formState.errors.anneeObtention.message}
+              </p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              type="submit"
+              className="bg-orange-600 hover:bg-orange-700"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Envoi..." : "Envoyer la demande"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

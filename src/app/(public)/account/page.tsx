@@ -1,3 +1,4 @@
+// src/app/(public)/account/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -5,7 +6,12 @@ import { db } from "@/lib/db";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -21,9 +27,23 @@ function initials(first?: string | null, last?: string | null) {
   return (f + l).toUpperCase() || "U";
 }
 
+type FieldKey =
+  | "firstName"
+  | "lastName"
+  | "promotion"
+  | "birthdate"
+  | "company"
+  | "role"
+  | "email"
+  | "isAdherent"
+  | "isAlumni"
+  | "lastLoginAt";
+
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) redirect("/sign-in");
+  if (!session?.user?.id) {
+    redirect("/sign-in");
+  }
 
   const user = await db.user.findUnique({
     where: { id: String(session.user.id) },
@@ -41,20 +61,13 @@ export default async function AccountPage() {
       lastLoginAt: true,
     },
   });
-  if (!user) redirect("/sign-in");
+
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   const rows: Array<{
-    key:
-      | "firstName"
-      | "lastName"
-      | "promotion"
-      | "birthdate"
-      | "company"
-      | "role"
-      | "email"
-      | "isAdherent"
-      | "isAlumni"
-      | "lastLoginAt";
+    key: FieldKey;
     label: string;
     value: string;
     editable?: boolean;
@@ -66,17 +79,15 @@ export default async function AccountPage() {
     {
       key: "birthdate",
       label: "Date de naissance",
-      value: user.birthdate ? new Date(user.birthdate as any).toLocaleDateString("fr-FR") : "—",
+      value: user.birthdate ? new Date(user.birthdate as unknown as string).toLocaleDateString("fr-FR") : "—",
       editable: true,
     },
     { key: "company", label: "Entreprise", value: user.company ?? "—", editable: true },
     { key: "role", label: "Rôle", value: user.role ?? "—" },
 
-    // nouveaux statuts
     { key: "isAdherent", label: "Adhérent", value: user.isAdherent ? "Oui" : "Non" },
     { key: "isAlumni", label: "Alumni", value: user.isAlumni ? "Oui" : "Non" },
 
-    // info activité (lecture seule)
     {
       key: "lastLoginAt",
       label: "Dernière connexion",
@@ -103,10 +114,10 @@ export default async function AccountPage() {
         <CardContent>
           {/* Actions sous le header */}
           <div className="flex flex-wrap gap-2 mb-4">
+            {/* ✅ Assure-toi que RequestAlumniButton a: type Props = { isAlumni?: boolean } */}
             <RequestAlumniButton isAlumni={user.isAlumni} />
             <ChangePasswordButton />
             <SignOutButton />
-            {/* Danger zone */}
             <DeleteAccountButton />
           </div>
 
@@ -127,6 +138,7 @@ export default async function AccountPage() {
                     <TableCell>{r.value}</TableCell>
                     <TableCell className="text-right">
                       {r.editable ? (
+                        // Si EditFieldMenu attend un type plus strict, on peut garder ce cast.
                         <EditFieldMenu field={r.key as any} currentValue={r.value} />
                       ) : null}
                     </TableCell>
