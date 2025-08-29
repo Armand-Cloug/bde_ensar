@@ -1,33 +1,24 @@
 // app/event/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+import { unstable_noStore as noStore } from 'next/cache';
+
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-function fmtDate(d: Date | string) {
-  const date = typeof d === "string" ? new Date(d) : d;
-  return date.toLocaleDateString("fr-FR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+function fmtDate(d: Date | string) { /* ... inchangé ... */ }
 
 export default async function EventsIndexPage() {
+  noStore(); // ✅ pas de prerender/ISR, fetch à la demande (runtime)
+
   const now = new Date();
 
   const events = await db.event.findMany({
-    where: {
-      isActive: true,
-      date: { gte: now }, // « en cours / à venir » (tu peux enlever si tu veux tous les actifs)
-    },
+    where: { isActive: true, date: { gte: now } },
     orderBy: { date: "asc" },
-    include: {
-      eventPages: { select: { slug: true }, take: 1 },
-    },
+    include: { eventPages: { select: { slug: true }, take: 1 } },
   });
 
   return (

@@ -1,20 +1,20 @@
 // app/(public)/gallerie/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+import { unstable_noStore as noStore } from 'next/cache';
+
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { ImageIcon } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
 export default async function GalleryListPage() {
+  noStore(); // ← force un rendu runtime, pas de cache ISR/SSG
+
   const events = await db.galleryEvent.findMany({
     where: { isActive: true },
     orderBy: { createdAt: 'desc' },
     include: {
-      photos: {
-        select: { imagePath: true },
-        take: 1,
-        orderBy: { id: 'asc' },
-      },
+      photos: { select: { imagePath: true }, take: 1, orderBy: { id: 'asc' } },
     },
   });
 

@@ -1,9 +1,15 @@
 // app/(public)/stages/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+import { unstable_noStore as noStore } from 'next/cache';
+
 import { db } from "@/lib/db";
 import SpotsMapClient from "@/components/stages/SpotsMapClient";
 import AddSpotDialog from "@/components/stages/AddSpotDialog";
 
 export default async function StagesPage() {
+  noStore(); // évite tout prerender/ISR
+
   // On affiche uniquement les points approuvés
   const spots = await db.internshipSpot.findMany({
     where: { approved: true },
