@@ -59,16 +59,17 @@ services:
     container_name: mariadb
     restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-appdb}
-      MARIADB_USER: ${MARIADB_USER:-appuser}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-bde_prod}
+      MARIADB_USER: ${MARIADB_USER:-bde_prod}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$MARIADB_ROOT_PASSWORD\" --silent"]
+      # Utilise mariadb-admin + QUOTES + $$ pour le mot de passe
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p\"$${MARIADB_ROOT_PASSWORD}\" --silent || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 30
-      start_period: 20s
+      start_period: 60s   # laisse le temps à l'init la 1ère fois
     networks:
       - internal
 
