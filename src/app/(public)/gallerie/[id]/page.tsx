@@ -61,7 +61,7 @@ export default async function GalleryDetailPage({
       {/* Mini-grille de vignettes (optionnel) */}
       {photos.length > 1 ? (
         <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-          {photos.map((p, i) => (
+          {photos.map((p: any, i: number) => (
             <div key={i} className="border rounded overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.src} alt="" className="w-full h-20 object-cover" />
