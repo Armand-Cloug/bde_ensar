@@ -51,6 +51,12 @@ services:
       - traefik.http.routers.app-www.entrypoints=websecure
       - traefik.http.routers.app-www.tls.certresolver=le
       - traefik.http.routers.app-www.service=app
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - proxy
       - internal
