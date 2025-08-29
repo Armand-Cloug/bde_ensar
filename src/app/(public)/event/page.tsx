@@ -8,13 +8,23 @@ import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-function fmtDate(d: Date | string) { /* ... inchangé ... */ }
+// ✅ typage explicite du retour
+function fmtDate(d: Date | string): string {
+  const date = typeof d === "string" ? new Date(d) : d;
+  return date.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export default async function EventsIndexPage() {
-  noStore(); // ✅ pas de prerender/ISR, fetch à la demande (runtime)
+  noStore();
 
   const now = new Date();
-
   const events = await db.event.findMany({
     where: { isActive: true, date: { gte: now } },
     orderBy: { date: "asc" },
