@@ -51,7 +51,7 @@ export async function GET(req: Request) {
     }),
   ]);
 
-  const rows = requests.map(r => ({
+  const rows = requests.map((r: any) => ({
     id: String(r.id),
     userId: String(r.user.id),
     firstName: r.user.firstName,
