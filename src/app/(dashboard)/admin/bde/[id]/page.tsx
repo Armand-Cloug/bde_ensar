@@ -96,7 +96,7 @@ export default async function BdeDetailsPage({
               </TableHeader>
               <TableBody>
                 {team.members.length ? (
-                  team.members.map((m) => (
+                  team.members.map((m: any) => (
                     <TableRow key={m.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
