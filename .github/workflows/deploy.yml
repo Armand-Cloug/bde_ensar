@@ -123,7 +123,7 @@ jobs:
               echo "#                     BASE DE DONNÉES"
               echo "############################################################"
               # URL Prisma (tu gardes la tienne)
-              echo "DATABASE_URL=${{ vars.DATABASE_URL }}"
+              echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
               echo
               # Vars "fonctionnelles" (utilisées par compose)
               echo "DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}"
@@ -202,7 +202,7 @@ jobs:
             else
               chmod 600 traefik/acme.json
             fi
-            
+
             echo "[4/6] Démarrage Traefik + DB"
             sudo docker compose down || true
             sudo docker compose up -d traefik db
