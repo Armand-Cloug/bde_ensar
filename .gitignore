@@ -43,3 +43,6 @@ next-env.d.ts
 # Gallery & media uploads (kept out of git)
 public/upload/**
 !public/upload/.gitkeep
+
+# Log Local
+output.log

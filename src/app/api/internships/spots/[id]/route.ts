@@ -1,72 +1,56 @@
-// app/api/internships/spots/[id]/route.ts
+// src/app/api/internships/spots/[id]/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import * as z from "zod";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-const PatchSchema = z.object({
-  title: z.string().min(2).optional(),
-  companyName: z.string().min(2).optional(),
-  address: z.string().min(3).optional(),
-  city: z.string().optional(),
-  countryCode: z.string().length(2).optional(),
-  countryName: z.string().optional(),
-  lat: z.number().finite().optional(),
-  lng: z.number().finite().optional(),
-  contactEmail: z.string().email().optional().nullable(),
-  website: z.string().url().optional().nullable(),
-  description: z.string().max(2000).optional().nullable(),
-  approved: z.boolean().optional(),
-});
+// (optionnel) helper d'auth admin
+async function requireAdmin() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user || (session.user as any).role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return null;
+}
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-  const spot = await db.internshipSpot.findUnique({
-    where: { id: params.id },
-    select: {
-      id: true,
-      title: true,
-      companyName: true,
-      address: true,
-      city: true,
-      countryCode: true,
-      countryName: true,
-      lat: true,
-      lng: true,
-      website: true,
-      contactEmail: true,
-      description: true,
-      approved: true,
-      createdAt: true,
-    },
-  });
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  const spot = await db.internshipSpot.findUnique({ where: { id } });
   if (!spot) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json({ spot });
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const role = (session.user as any).role;
-  if (role !== "admin" && role !== "bde") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const guard = await requireAdmin();
+  if (guard) return guard;
 
-  const payload = await req.json();
-  const data = PatchSchema.parse(payload);
+  const { id } = await params;
+  const data = await req.json();
 
   await db.internshipSpot.update({
-    where: { id: params.id },
+    where: { id },
     data,
   });
 
   return NextResponse.json({ ok: true });
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const role = (session.user as any).role;
-  if (role !== "admin" && role !== "bde") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const guard = await requireAdmin();
+  if (guard) return guard;
 
-  await db.internshipSpot.delete({ where: { id: params.id } });
+  const { id } = await params;
+
+  await db.internshipSpot.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

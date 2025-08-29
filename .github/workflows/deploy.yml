@@ -31,21 +31,22 @@ jobs:
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
 
-      - name: Write SSH key file
+      - name: Write SSH key file (normalize)
         run: |
+          set -e
           mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ci
+          # Écrit la clé telle quelle, puis convertit CRLF -> LF
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ci
+          sed -i 's/\r$//' ~/.ssh/id_ci
           chmod 600 ~/.ssh/id_ci
+          # Vérifie que la clé est lisible et valide (ne log pas la clé)
+          ssh-keygen -y -f ~/.ssh/id_ci > /dev/null
 
       - name: Sanity SSH (whoami@server)
         run: |
-          # Si vous avez un secret SERVER_HOST_FINGERPRINT, vous pouvez faire :
-          # ssh -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
-          #     -i ~/.ssh/id_ci ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo OK && whoami && hostname"
           ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ci \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
               "echo OK && whoami && hostname && test -d ~/.ssh && echo HAS_.ssh || echo NO_.ssh"
-        # Si la clé a une passphrase, ajoutez ce secret et décommentez (actions SSH ne la lisent pas ici)
 
       # 1) Transfert des fichiers du repo vers le serveur (dans ~/app)
       - name: Upload project to server
