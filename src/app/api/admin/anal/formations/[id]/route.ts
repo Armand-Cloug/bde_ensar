@@ -1,3 +1,4 @@
+// src/app/api/admin/anal/formations/[id]/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";

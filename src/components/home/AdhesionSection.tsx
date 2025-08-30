@@ -1,10 +1,12 @@
-"use client";
+// src/components/home/AdhesionSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
+import { CheckCircle2 } from "lucide-react";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { CheckCircle2 } from "lucide-react";
 
 const benefits = [
   "Tarifs réduits sur les événements",

@@ -1,3 +1,5 @@
+// src/components/admin/tabs/anal/type.ts
+
 export type CoursNode = {
   id: string;
   title: string;

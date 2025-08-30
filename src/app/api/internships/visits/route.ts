@@ -1,9 +1,10 @@
-// app/api/internships/visits/route.ts
+// src/app/api/internships/visits/route.ts
 import { NextResponse } from "next/server";
-import * as z from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+
+import * as z from "zod";
 
 const VisitSchema = z.object({
   spotId: z.string().min(1),

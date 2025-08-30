@@ -1,15 +1,13 @@
-// app/donnees-personnelles/page.tsx
-import Link from "next/link";
+// src/app/(footer)/donnees-personnelles/page.tsx
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ShieldCheck, Sparkles, FileText, Lock, Cookie } from "lucide-react";
 
 const ORG = {
   name: "BDE ENSAR",
-  controllerEmail: "bde.ensar.contact@gmail.com", // contact RGPD
+  controllerEmail: "bde.ensar.contact@gmail.com",        // contact RGPD
   dpoName: "Référent RGDP du BDE",                       // si DPO formel, sinon indique "Référent RGPD"
   dpoEmail: "bde.ensar.contact@gmail.com",
-  postalAddress: "11 RUE ARCHIMEDE 79000 NIORT",                 // adresse postale
+  postalAddress: "11 RUE ARCHIMEDE 79000 NIORT",         // adresse postale
 };
 
 export default function PrivacyPage() {

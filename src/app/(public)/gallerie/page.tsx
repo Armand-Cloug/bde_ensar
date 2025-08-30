@@ -1,11 +1,12 @@
-// app/(public)/gallerie/page.tsx
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// src/app/(public)/gallerie/page.tsx
 import { unstable_noStore as noStore } from 'next/cache';
-
-import Link from 'next/link';
 import { db } from '@/lib/db';
 import { ImageIcon } from 'lucide-react';
+
+import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function GalleryListPage() {
   noStore(); // ← force un rendu runtime, pas de cache ISR/SSG

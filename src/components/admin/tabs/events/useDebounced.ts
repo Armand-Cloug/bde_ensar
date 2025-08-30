@@ -1,4 +1,6 @@
+// src/components/admin/tabs/events/useDebounced.ts
 'use client';
+
 import * as React from 'react';
 
 export function useDebounced<T>(value: T, delay = 300) {

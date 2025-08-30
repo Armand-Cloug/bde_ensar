@@ -1,7 +1,6 @@
-// components/admin/tabs/PartnersTab.tsx
+// src/components/admin/tabs/PartnersTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
+
+import * as React from 'react';
 
 type Row = {
   id: string;
@@ -117,7 +118,7 @@ export default function PartnersTab() {
           />
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-amber-500 hover:bg-amber-600 text-white">Nouveau partenaire</Button>
+              <Button className="bg-amber-600 hover:bg-amber-700">+ Nouveau partenaire</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

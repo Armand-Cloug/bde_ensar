@@ -1,10 +1,11 @@
-// app/api/admin/gallery/photos/[photoId]/route.ts
+// src/app/api/admin/gallery/photos/[photosId]/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import path from "path";
 import { rm } from "fs/promises";
+
+import path from "path";
 
 export const runtime = "nodejs";
 

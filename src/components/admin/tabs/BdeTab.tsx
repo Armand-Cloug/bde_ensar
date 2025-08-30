@@ -1,7 +1,10 @@
+// src/components/admin/tabs/BdeTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+
 import {
   Table,
   TableBody,
@@ -10,8 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+
+import * as React from 'react';
 import RowActions from './bde/RowActions';
 import CreateBdeButton from './bde/CreateBdeButton';
 

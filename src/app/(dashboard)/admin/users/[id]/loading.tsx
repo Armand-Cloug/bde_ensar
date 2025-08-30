@@ -1,3 +1,4 @@
+// src/app/(dashboard)/admin/users/[id]/loading.tsx
 export default function Loading() {
   return (
     <main className="px-4 py-6 max-w-4xl mx-auto">

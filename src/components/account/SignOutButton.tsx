@@ -1,3 +1,4 @@
+// src/components/account/SignOutButton.tsx
 'use client';
 
 import { signOut } from "next-auth/react";

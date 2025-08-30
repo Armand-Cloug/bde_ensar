@@ -1,7 +1,9 @@
-"use client";
+// src/components/home/Section.tsx
+'use client';
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+
 import React from "react";
 
 export default function Section({

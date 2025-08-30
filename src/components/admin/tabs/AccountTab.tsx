@@ -1,3 +1,4 @@
+// src/components/admin/tabs/AccountTab.tsx
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";

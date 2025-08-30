@@ -1,9 +1,11 @@
-"use client";
+// src/components/home/FormationsSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
+import { GraduationCap, BookOpenCheck, Rocket } from "lucide-react";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
-import { GraduationCap, BookOpenCheck, Rocket } from "lucide-react";
 
 const formations = [
   {

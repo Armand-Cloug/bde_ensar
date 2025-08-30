@@ -1,9 +1,8 @@
-// app/adhesion/page.tsx
+// app/(public)/adhesion/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import Image from "next/image";
 import { redirect } from "next/navigation";
-import AdhesionPayButton from "@/components/adhesion/AdhesionPayButton";
+
 import {
   ShieldCheck,
   PartyPopper,
@@ -14,6 +13,9 @@ import {
   ArrowRight,
   CalendarClock,
 } from "lucide-react";
+
+import Image from "next/image";
+import AdhesionPayButton from "@/components/adhesion/AdhesionPayButton";
 
 export default async function AdhesionPage({
   searchParams,

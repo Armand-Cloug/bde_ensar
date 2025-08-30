@@ -1,10 +1,8 @@
-// app/admin/users/[id]/page.tsx
+// src/app/(dashboard)/admin/users/[id]/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import ChangePasswordButton from "@/components/admin/users/ChangePasswordButton";
 import DeleteUserButton from "@/components/admin/users/DeleteUserButton";
 import EditFieldMenu from "@/components/admin/users/EditFieldMenu";
+import Link from "next/link";
 
 function initials(f?: string | null, l?: string | null) {
   const a = (f ?? "").trim()[0] ?? "";

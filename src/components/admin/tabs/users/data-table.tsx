@@ -1,6 +1,18 @@
+// src/components/admin/tabs/users/data-table.tsx
 'use client';
 
-import * as React from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
+import {
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,13 +22,10 @@ import {
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
-  flexRender,               // 👈 important
+  flexRender,               
 } from '@tanstack/react-table';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table';
+
+import * as React from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -1,6 +1,8 @@
+// src/app/api/user/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { hash } from "bcrypt";
+
 import * as z from "zod";
 
 const userSchema = z.object({

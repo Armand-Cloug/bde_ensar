@@ -1,3 +1,4 @@
+// src/lib/mail.ts
 import nodemailer from "nodemailer";
 
 export async function sendMail(opts: { to: string; subject: string; html: string }) {

@@ -1,9 +1,10 @@
 // app/(public)/gallerie/[id]/page.tsx
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
-import PhotosCarousel from '@/components/gallery/PhotosCarousel';
 import { ArrowLeft } from 'lucide-react';
+
+import Link from 'next/link';
+import PhotosCarousel from '@/components/gallery/PhotosCarousel';
 
 export const dynamic = 'force-dynamic';
 

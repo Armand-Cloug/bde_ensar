@@ -1,13 +1,22 @@
-"use client";
+// src/components/admin/tabs/adherents/ResetAdherentsButton.tsx
+'use client';
 
-import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent,
+  AlertDialogDescription, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useToast } from "@/hooks/use-toast";
+
+import * as React from "react";
 
 export default function ResetAdherentsButton({ onDone }: { onDone?: () => void }) {
   const { toast } = useToast();

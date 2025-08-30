@@ -1,3 +1,4 @@
+// src/components/admin/tabs/events/HeaderBar.tsx
 'use client';
 
 import { Input } from '@/components/ui/input';
@@ -18,8 +19,8 @@ export default function HeaderBar({ searchValue, onSearchChange, onOpenCreate }:
         onChange={(e) => onSearchChange(e.target.value)}
         className="w-64"
       />
-      <Button onClick={onOpenCreate} className="bg-amber-500 hover:bg-amber-600 text-white">
-        Nouvel événement
+      <Button onClick={onOpenCreate} className="bg-amber-600 hover:bg-amber-700">
+        + Nouvel événement
       </Button>
     </div>
   );

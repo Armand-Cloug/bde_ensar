@@ -1,4 +1,4 @@
-// app/api/_housekeeping/route.ts
+// src/app/api/_housekeeping/route.ts
 import { NextResponse } from "next/server";
 import { maybeRunInactivitySweep } from "@/lib/housekeeping";
 

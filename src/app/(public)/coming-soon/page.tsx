@@ -1,8 +1,9 @@
-// app/coming-soon/page.tsx
-import Link from "next/link";
+// src/app/(public)/coming-soon/page.tsx
 import { Rocket, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+
+import Link from "next/link";
 
 export default function ComingSoonPage() {
   return (

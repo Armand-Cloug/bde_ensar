@@ -1,13 +1,15 @@
-// components/admin/AdminPanel.tsx
+// src/components/admin/AdminPanel.tsx
 'use client';
 
 import { useState } from 'react';
+
 import {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
 } from '@/components/ui/tabs';
+
 import {
   Select,
   SelectTrigger,

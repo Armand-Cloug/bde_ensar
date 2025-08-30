@@ -1,8 +1,10 @@
-"use client";
+// src/components/home/NiortSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
 
 const stats = [
   { label: "Capitale des Assurances", value: "Niort Tech" },

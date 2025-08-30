@@ -1,7 +1,9 @@
+// src/app/(dashboard)/admin/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
+
 import AdminPanel from "@/components/admin/AdminPanel";
 
 export default async function AdminPage() {

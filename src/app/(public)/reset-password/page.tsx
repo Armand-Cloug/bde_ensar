@@ -1,4 +1,4 @@
-// app/reset-password/page.tsx
+// src/app/(public)/reset-password/page.tsx
 import RequestForm from "@/components/auth/RequestResetForm";
 import ConfirmForm from "@/components/auth/ConfirmResetForm";
 

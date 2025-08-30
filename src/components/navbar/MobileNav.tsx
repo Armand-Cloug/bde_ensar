@@ -1,4 +1,9 @@
+// src/components/navbar/MobileNav.tsx
 'use client';
+
+import { AlignJustify } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 import {
   Sheet,
@@ -6,11 +11,10 @@ import {
   SheetTrigger,
   SheetClose,
 } from '@/components/ui/sheet';
-import { AlignJustify } from 'lucide-react';
+
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { useSession } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
 
 export default function MobileNav() {
   const { data: session, status } = useSession();

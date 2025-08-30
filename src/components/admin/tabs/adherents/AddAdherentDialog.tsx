@@ -1,10 +1,20 @@
-"use client";
+// src/components/admin/tabs/adherents/AddAdherentDialog.tsx
+'use client';
 
-import * as React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription, 
+  DialogFooter 
+} from "@/components/ui/dialog";
+
+import * as React from "react";
 
 type PickUser = {
   id: string;

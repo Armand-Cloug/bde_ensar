@@ -1,3 +1,4 @@
+// src/components/admin/tabs/bde/CreateBdeButton.tsx
 'use client';
 
 import { useState } from "react";
@@ -33,7 +34,7 @@ export default function CreateBdeButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Créer un BDE</Button>
+        <Button className="bg-amber-600 hover:bg-amber-700"> + Créer un BDE</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -1,15 +1,14 @@
-// app/admin/bde/[id]/page.tsx
+// app/(dashboard)/admin/bde/[id]/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
+import Link from "next/link";
 import AddMemberButton from "@/components/admin/bde/AddMemberButton";
 import MemberRowActions from "@/components/admin/bde/MemberRowActions";
 

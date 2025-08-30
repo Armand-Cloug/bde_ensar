@@ -1,14 +1,21 @@
+// src/components/admin/tabs/gallery/GalleryRowActions.tsx
 'use client';
 
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
-  DropdownMenuSeparator, DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { GalleryEventRow } from './types';
+
+import {
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel,
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 import GalleryEventDetailsDialog from './GalleryEventDetailsDialog';
 
 export default function GalleryRowActions({

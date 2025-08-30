@@ -1,18 +1,25 @@
-// components/stages/SpotForm.tsx
+// src/components/admin/tabs/stages/SpotForm.tsx
 "use client";
 
-import * as React from "react";
-import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Resolver } from "react-hook-form";
+
+import {
+  Form, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormControl, 
+  FormMessage,
+} from "@/components/ui/form";
+
+import * as React from "react";
+import * as z from "zod";
 
 const Schema = z.object({
   title: z.string().min(2),
@@ -187,7 +194,7 @@ export default function SpotForm({ onCreated }: { onCreated?: () => void }) {
         )} />
 
         <div className="md:col-span-2 flex justify-end">
-          <Button className="bg-orange-600 hover:bg-orange-700">Créer</Button>
+          <Button className="bg-amber-600 hover:bg-amber-700">+ Créer un point</Button>
         </div>
       </form>
     </Form>

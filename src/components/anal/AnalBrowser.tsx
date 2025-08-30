@@ -1,6 +1,6 @@
-"use client";
+// src/components/anal/AnalBrowser.tsx
+'use client';
 
-import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, BookOpen, Search } from "lucide-react";
+
+import * as React from "react";
 
 type Cours = {
   id: string;

@@ -1,10 +1,15 @@
-"use client";
+// src/components/admin/tabs/alumni/alumni-columns.tsx
+'use client';
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
 import {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem
+  DropdownMenu, 
+  DropdownMenuTrigger, 
+  DropdownMenuContent, 
+  DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
 
 export type AlumniRow = {

@@ -1,4 +1,5 @@
-"use client";
+// src/components/apropos/PartnersMarquee.tsx
+'use client';
 
 type PartnerLite = {
   id: string;

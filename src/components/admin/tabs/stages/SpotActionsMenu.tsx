@@ -1,16 +1,19 @@
+// src/components/admin/tabs/stages/SpotActionsMenu.tsx
 'use client';
 
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
+import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+
 import EditSpotDialog from './EditSpotDialog';
-import { useToast } from '@/hooks/use-toast';
+import * as React from 'react';
 
 type Props = {
   spotId: string;

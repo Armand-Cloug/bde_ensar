@@ -1,9 +1,11 @@
+// src/components/admin/tabs/StagesTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
+
+import * as React from 'react';
 import SpotActionsMenu from './stages/SpotActionsMenu';
 import SpotForm from './stages/SpotForm';
 

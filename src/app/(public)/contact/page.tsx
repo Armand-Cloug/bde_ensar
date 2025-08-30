@@ -1,8 +1,9 @@
-// app/contact/page.tsx
-import ContactForm from "@/components/contact/ContactForm";
+// src/app/(public)/contact/page.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Instagram, Linkedin, Mail, MapPin, Sparkles } from "lucide-react";
+
 import Link from "next/link";
+import ContactForm from "@/components/contact/ContactForm";
 
 const BDE_EMAIL = process.env.BDE_EMAIL || "bde.ensar.contact@gmail.com";
 const BDE_ADDRESS = process.env.BDE_ADDRESS || "Adresse du BDE à compléter";

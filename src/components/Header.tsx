@@ -1,10 +1,12 @@
+// src/components/Header.tsx
 'use client';
+
+import { Instagram, Lock } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import MainNav from "./navbar/MainNav";
 import MobileNav from "./navbar/MobileNav";
 import Link from "next/link";
-import { Instagram, Lock } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 export default function Header() {
   const { data: session, status } = useSession();

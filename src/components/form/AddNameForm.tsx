@@ -1,7 +1,13 @@
-// /app/onboarding/page.tsx
+// src/components/form/AddNameForm.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '@/components/ui/input';  // adapte si besoin (../ui/input)
+import { Button } from '@/components/ui/button'; // adapte si besoin (../ui/button)
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+
 import {
   Form,
   FormControl,
@@ -10,12 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'; // adapte si besoin (../ui/form)
+
 import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';  // adapte si besoin (../ui/input)
-import { Button } from '@/components/ui/button'; // adapte si besoin (../ui/button)
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 
 const FormSchema = z.object({
   firstName: z.string().min(1, 'Veuillez saisir votre prénom'),

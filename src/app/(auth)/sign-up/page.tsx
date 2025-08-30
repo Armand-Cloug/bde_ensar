@@ -1,3 +1,4 @@
+// src/app/(auth)/sign-up/page.tsx
 import SignUpForm from '@/components/form/SignUpForm';
 
 const page = () => {

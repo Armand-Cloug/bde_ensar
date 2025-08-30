@@ -1,3 +1,6 @@
+// src/components/GoogleSignInButton.tsx
+'use client';
+
 import { FC, ReactNode } from 'react';
 import { Button } from './ui/button';
 import { signIn } from 'next-auth/react';

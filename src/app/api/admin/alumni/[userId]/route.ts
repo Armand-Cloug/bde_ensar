@@ -1,4 +1,4 @@
-// app/api/admin/alumni/[userId]/route.ts
+// src/app/api/admin/alumni/[userId]/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

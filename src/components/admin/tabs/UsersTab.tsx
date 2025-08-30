@@ -1,9 +1,11 @@
+// src/components/admin/tabs/UsersTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTableServer } from './users/data-table-server';
 import { columns, type UserRow } from './users/columns';
+
+import * as React from 'react';
 
 function useDebounced<T>(value: T, delay = 300) {
   const [debounced, setDebounced] = React.useState(value);

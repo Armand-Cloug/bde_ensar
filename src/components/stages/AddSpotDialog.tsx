@@ -1,8 +1,10 @@
-// components/stages/AddSpotDialog.tsx
-"use client";
+// src/components/stages/AddSpotDialog.tsx
+'use client';
 
-import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -11,9 +13,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+
 import SpotForm from "@/components/admin/tabs/stages/SpotForm";
+import * as React from "react";
 
 export default function AddSpotDialog() {
   const [open, setOpen] = React.useState(false);

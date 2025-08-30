@@ -1,10 +1,12 @@
+// src/components/admin/tabs/EventsTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { EventRow } from './events/types';
 import { useDebounced } from './events/useDebounced';
+
+import * as React from 'react';
 import HeaderBar from './events/HeaderBar';
 import EventsTable from './events/EventsTable';
 import CreateEventDialog from './events/CreateEventDialog';

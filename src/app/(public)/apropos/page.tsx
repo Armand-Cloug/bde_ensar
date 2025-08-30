@@ -1,12 +1,13 @@
-// app/apropos/page.tsx
-export const dynamic = 'force-dynamic'; // pas de SSG/ISR au build
-export const revalidate = 0;            // pas de cache statique
+// src/app/(public)/apropos/page.tsx
 import { unstable_noStore as noStore } from 'next/cache';
-
+import { Sparkles } from "lucide-react";
 import { db } from "@/lib/db";
+
 import MembersCarousel from "@/components/apropos/MembersCarousel";
 import PartnersMarquee from "@/components/apropos/PartnersMarquee";
-import { Sparkles } from "lucide-react";
+
+export const dynamic = 'force-dynamic'; // pas de SSG/ISR au build
+export const revalidate = 0;            // pas de cache statique
 
 export default async function AproposPage() {
   noStore(); // s'assure que la data est toujours demandée au runtime

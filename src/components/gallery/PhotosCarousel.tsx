@@ -1,7 +1,9 @@
+// src/components/gallery/PhotosCarousel.tsx
 'use client';
 
-import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import * as React from 'react';
 
 type Photo = { src: string; alt?: string };
 

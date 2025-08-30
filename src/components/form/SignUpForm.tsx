@@ -1,6 +1,13 @@
+// src/components/form/SignUpForm.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast'; 
+
 import {
   Form,
   FormControl,
@@ -9,14 +16,10 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
+
 import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
 import Link from 'next/link';
 import GoogleSignInButton from '../GoogleSignInButton';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast'; 
 
 const FormSchema = z
   .object({
@@ -109,7 +112,7 @@ const SignUpForm = () => {
             name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email (Évitez l’adresse @etu.univ-poitiers.fr pour conserver votre compte après vos études et devenir alumni.) </FormLabel>
                 <FormControl>
                   <Input placeholder='mail@example.com' {...field} />
                 </FormControl>

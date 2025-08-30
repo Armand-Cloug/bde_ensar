@@ -1,18 +1,29 @@
-// components/account/EditFieldMenu.tsx
+// src/components/account/EditFieldMenu.tsx
 'use client';
 
-import * as React from 'react';
+
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { MoreHorizontal } from 'lucide-react';
+
+import {
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import {
+  Dialog, 
+  DialogContent, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+import * as React from 'react';
 
 type EditableField = 'firstName' | 'lastName' | 'promotion' | 'birthdate' | 'company';
 

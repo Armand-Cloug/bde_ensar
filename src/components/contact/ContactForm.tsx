@@ -1,11 +1,12 @@
-// components/contact/ContactForm.tsx
-"use client";
+// src/components/contact/ContactForm.tsx
+'use client';
 
-import * as React from "react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+
+import * as React from "react";
 
 export default function ContactForm() {
   const [email, setEmail] = useState("");

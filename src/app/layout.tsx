@@ -1,13 +1,15 @@
-// app/layout.tsx
+// src/app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import "@/styles/globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import AuthProvider from "@/providers/SessionProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TailwindIndicator } from "@/components/Tailwind-indicator";
 import { Toaster } from "@/components/ui/toaster";
+
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import AuthProvider from "@/providers/SessionProvider";
 import PingHousekeeping from "@/components/PingHousekeeping";
+
+import "@/styles/globals.css";
 
 const siteUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
 

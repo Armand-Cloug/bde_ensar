@@ -1,12 +1,13 @@
-// app/event/page.tsx
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// src/app/(public)/event/page.tsx
 import { unstable_noStore as noStore } from 'next/cache';
-
-import Link from "next/link";
 import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // ✅ typage explicite du retour
 function fmtDate(d: Date | string): string {

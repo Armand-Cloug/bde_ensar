@@ -1,17 +1,26 @@
+// src/components/admin/tabs/users/data-table-server.tsx
 'use client';
 
-import * as React from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
+import {
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead,
+  TableHeader, 
+  TableRow,
+} from '@/components/ui/table';
+
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   type ColumnDef,
 } from '@tanstack/react-table';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table';
+
+import * as React from 'react';
 
 type Props<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];

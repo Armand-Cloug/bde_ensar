@@ -1,12 +1,14 @@
+// src/components/admin/tabs/AnalTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import FormationTree from './anal/FormationTree';
 import { CreateFormationDialog } from './anal/CreateDialogs';
 import type { FormationNode } from './anal/type';
+
+import * as React from 'react';
+import FormationTree from './anal/FormationTree';
 
 export default function AnalTab() {
   const { toast } = useToast();
@@ -36,7 +38,7 @@ export default function AnalTab() {
         <CardTitle>Anal — Formations & cours</CardTitle>
         <Button
           onClick={() => setOpenCreateFormation(true)}
-          className="bg-amber-500 hover:bg-amber-600 text-white"
+          className="bg-amber-600 hover:bg-amber-700"
         >
           + Ajouter une formation
         </Button>

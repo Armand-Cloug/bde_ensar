@@ -1,10 +1,12 @@
-"use client";
+// src/components/admin/tabs/AlumniTab.tsx
+'use client';
 
-import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { makeAlumniColumns, type AlumniRow } from "./alumni/alumni-columns";
 import { makeRequestColumns, type RequestRow } from "./alumni/request-columns";
 import { DataTableServer } from "./users/data-table-server";
+
+import * as React from "react";
 
 function useDebounced<T>(value: T, delay = 300) {
   const [debounced, setDebounced] = React.useState(value);

@@ -1,3 +1,4 @@
+// src/app/(auth)/onboarding/page.tsx
 import AddNameForm from "@/components/form/AddNameForm";
 
 const page = () => {

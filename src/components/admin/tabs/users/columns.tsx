@@ -1,15 +1,18 @@
+// src/components/admin/tabs/users/columns.tsx
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import Link from 'next/link';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import Link from 'next/link';
 
 export type UserRow = {
   id: string;

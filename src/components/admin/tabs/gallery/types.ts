@@ -1,3 +1,5 @@
+// src/components/admin/tabs/gallery/types.ts
+
 export type GalleryEventRow = {
   id: string;
   title: string;

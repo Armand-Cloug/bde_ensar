@@ -1,10 +1,12 @@
+// src/components/navbar/MainNav.tsx
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils'; // si tu as un utilitaire cn, sinon supprime et fais une concat simple
+
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function MainNav() {
   const { data: session, status } = useSession();

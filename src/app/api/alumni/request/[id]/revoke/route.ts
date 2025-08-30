@@ -1,4 +1,4 @@
-// app/api/admin/alumni/users/[id]/revoke/route.ts
+// src/app/api/alumni/request/[id]/revoke/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

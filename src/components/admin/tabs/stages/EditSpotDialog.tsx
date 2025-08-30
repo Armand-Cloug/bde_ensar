@@ -1,21 +1,32 @@
+// src/components/admin/tabs/stages/EditSpotDialog.tsx
 'use client';
 
-import * as React from 'react';
-import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import type { Resolver } from 'react-hook-form';
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import type { Resolver } from 'react-hook-form';
+
+import { 
+  Form, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormControl, 
+  FormMessage 
+} from '@/components/ui/form';
+
+import * as React from 'react';
+import * as z from 'zod';
 
 const Schema = z.object({
   title: z.string().min(2),

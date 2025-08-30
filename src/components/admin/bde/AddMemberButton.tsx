@@ -1,13 +1,21 @@
-// components/admin/bde/AddMemberButton.tsx
+// src/components/admin/bde/AddMemberButton.tsx
 'use client';
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogFooter, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
 
 export default function AddMemberButton({ teamId }: { teamId: string }) {
   const [open, setOpen] = useState(false);

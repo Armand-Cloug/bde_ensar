@@ -1,7 +1,6 @@
-// app/mentions-legales/page.tsx
-import Link from "next/link";
+// src/app/(footer)/mentions-legales/page.tsx
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Sparkles, Library, Scale, AtSign, Globe } from "lucide-react";
+import { Shield, Sparkles, Library, Globe } from "lucide-react";
 
 const ORG = {
   name: "BDE ENSAR",                           

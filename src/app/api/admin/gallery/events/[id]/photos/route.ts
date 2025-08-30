@@ -1,4 +1,4 @@
-// app/api/admin/gallery/events/[id]/photos/route.ts
+// src/app/api/admin/gallery/events/[id]/photos/route.ts  
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";

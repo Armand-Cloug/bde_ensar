@@ -1,16 +1,17 @@
+// src/components/admin/tabs/bde/RowActions.tsx
 'use client';
 
-import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +21,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+
+import Link from 'next/link';
+import * as React from 'react';
 
 export default function RowActions({
   id,

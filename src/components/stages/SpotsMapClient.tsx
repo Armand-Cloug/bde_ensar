@@ -1,5 +1,5 @@
-// components/stages/SpotsMapClient.tsx
-"use client";
+// src/components/stages/SpotsMapClient.tsx
+'use client';
 
 import dynamic from "next/dynamic";
 

@@ -1,4 +1,4 @@
-// /app/api/user/complete-profile/route.ts
+// src/app/api/user/complete-profile/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

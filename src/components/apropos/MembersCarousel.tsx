@@ -1,8 +1,8 @@
-// components/apropos/MembersCarousel.tsx
-"use client";
+// src/components/apropos/MembersCarousel.tsx
+'use client';
 
-import * as React from "react";
-import Autoplay from "embla-carousel-autoplay";
+import { Card, CardContent } from "@/components/ui/card";
+
 import {
   Carousel,
   CarouselContent,
@@ -10,7 +10,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
 
 type Member = {
   id: string;

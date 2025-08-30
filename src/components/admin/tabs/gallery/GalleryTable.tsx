@@ -1,9 +1,19 @@
+// src/components/admin/tabs/gallery/GalleryTable.tsx
 'use client';
 
-import * as React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import GalleryRowActions from './GalleryRowActions';
 import type { GalleryEventRow } from './types';
+
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from '@/components/ui/table';
+
+import * as React from 'react';
+import GalleryRowActions from './GalleryRowActions';
 
 function fmtDate(d: string) {
   return new Date(d).toLocaleString('fr-FR');

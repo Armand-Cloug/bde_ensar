@@ -1,8 +1,9 @@
-// app/(public)/anal/page.tsx
+// src/app/(public)/anal/page.tsx
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+
 import AnalBrowser from "@/components/anal/AnalBrowser";
 
 export const dynamic = "force-dynamic";

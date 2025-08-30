@@ -1,4 +1,4 @@
-// lib/db.ts
+// src/lib/db.ts
 import { PrismaClient } from '@prisma/client';
 
 const globalForDb = globalThis as unknown as {

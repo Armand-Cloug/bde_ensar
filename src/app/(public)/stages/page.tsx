@@ -1,11 +1,12 @@
-// app/(public)/stages/page.tsx
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// src/app/(public)/stages/page.tsx
 import { unstable_noStore as noStore } from 'next/cache';
-
 import { db } from "@/lib/db";
+
 import SpotsMapClient from "@/components/stages/SpotsMapClient";
 import AddSpotDialog from "@/components/stages/AddSpotDialog";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function StagesPage() {
   noStore(); // évite tout prerender/ISR

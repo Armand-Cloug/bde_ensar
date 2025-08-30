@@ -1,12 +1,15 @@
+// src/components/admin/tabs/GalleryTab.tsx
 'use client';
 
-import * as React from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import type { GalleryEventRow } from './gallery/types';
+
+import * as React from 'react';
 import CreateGalleryDialog from './gallery/CreateGalleryDialog';
 import GalleryTable from './gallery/GalleryTable';
-import type { GalleryEventRow } from './gallery/types';
 
 export default function GalleryTab() {
   const { toast } = useToast();
@@ -45,7 +48,7 @@ export default function GalleryTab() {
         <CardTitle>Galerie</CardTitle>
         <Button
           onClick={() => setOpenCreate(true)}
-          className="bg-amber-500 hover:bg-amber-600 text-white"
+          className="bg-amber-600 hover:bg-amber-700"
         >
           + Créer un événement
         </Button>

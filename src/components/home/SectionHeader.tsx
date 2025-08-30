@@ -1,4 +1,5 @@
-"use client";
+// src/components/home/SectionHeader.tsx
+'use client';
 
 import { motion } from "framer-motion";
 

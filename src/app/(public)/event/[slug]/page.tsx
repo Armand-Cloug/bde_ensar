@@ -1,8 +1,9 @@
-// app/event/[slug]/page.tsx
+// src/app/(public)/event/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
+
+import Link from "next/link";
 
 function fmtDate(d: Date | string) {
   const date = typeof d === "string" ? new Date(d) : d;

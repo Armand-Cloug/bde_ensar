@@ -1,6 +1,14 @@
+// src/components/form/SignInForm.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation'; 
+import { useToast } from '@/hooks/use-toast'; 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+
 import {
   Form,
   FormControl,
@@ -9,15 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
+
 import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
 import Link from 'next/link';
 import GoogleSignInButton from '../GoogleSignInButton';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation'; 
-import { useToast } from '@/hooks/use-toast'; 
+
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Veuillez saisir un email').email('Email invalide'),

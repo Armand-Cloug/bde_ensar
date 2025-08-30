@@ -1,7 +1,9 @@
+// src/app/api/admin/bde/teams/[id]/members/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+
 import * as z from "zod";
 
 const Schema = z.object({

@@ -1,10 +1,12 @@
+// src/components/admin/tabs/AdherentsTab.tsx
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DataTableServer } from './users/data-table-server';
 import { columns, type AdherentRow } from './adherents/columns';
+
+import * as React from 'react';
 import AddAdherentDialog from './adherents/AddAdherentDialog';
 import ResetAdherentsButton from './adherents/ResetAdherentsButton';
 
@@ -64,7 +66,7 @@ export default function AdherentsTab() {
         <CardTitle>Adhérents</CardTitle>
         <div className="flex flex-wrap gap-2">
           <Button className="bg-amber-600 hover:bg-amber-700" onClick={() => setOpenAdd(true)}>
-            Ajouter un adhérent
+            + Ajouter un adhérent
           </Button>
           <ResetAdherentsButton onDone={load} />
         </div>

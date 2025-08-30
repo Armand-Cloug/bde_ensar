@@ -1,9 +1,11 @@
-"use client";
+// src/components/home/BDESection.tsx
+'use client';
+
+import { motion } from "framer-motion";
+import { PartyPopper, Users2, CalendarDays, HeartHandshake } from "lucide-react";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
-import { PartyPopper, Users2, CalendarDays, HeartHandshake } from "lucide-react";
 
 const items = [
   {

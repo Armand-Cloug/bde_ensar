@@ -1,3 +1,4 @@
+// src/components/account/DeleteAccountButton.tsx
 'use client';
 
 import { useState } from 'react';

@@ -1,12 +1,13 @@
-// components/account/RequestAlumniButton.tsx
-"use client";
+// src/components/account/RequestAlumniButton.tsx
+'use client';
 
-import * as React from "react";
-import * as z from "zod";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+
 import {
   Dialog,
   DialogContent,
@@ -15,9 +16,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+
+import * as React from "react";
+import * as z from "zod";
 
 const Schema = z.object({
   diplome: z.string().min(1, "Diplôme requis"),

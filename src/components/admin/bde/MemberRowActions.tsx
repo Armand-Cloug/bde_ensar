@@ -1,16 +1,27 @@
-// components/admin/bde/MemberRowActions.tsx
+// src/components/admin/bde/MemberRowActions.tsx
 'use client';
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { MoreHorizontal } from "lucide-react";
+
+import { 
+  AlertDialog, 
+  AlertDialogAction, 
+  AlertDialogCancel, 
+  AlertDialogContent, 
+  AlertDialogFooter, 
+  AlertDialogHeader, 
+  AlertDialogTitle 
+} from "@/components/ui/alert-dialog";
+
 import Link from "next/link";
 import * as React from "react";
 

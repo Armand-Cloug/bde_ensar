@@ -1,10 +1,12 @@
-"use client";
+// src/components/home/AlumniSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
+import { Network } from "lucide-react";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { Network } from "lucide-react";
 
 export default function AlumniSection() {
   return (

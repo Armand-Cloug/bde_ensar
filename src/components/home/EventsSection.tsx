@@ -1,9 +1,11 @@
-"use client";
+// src/components/home/EventsSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
+import { Calendar, MapPin } from "lucide-react";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
-import { Calendar, MapPin } from "lucide-react";
 
 const sampleEvents = [
   { title: "Soirée d’intégration", date: "Septembre", place: "Niort" },

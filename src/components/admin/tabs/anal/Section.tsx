@@ -1,3 +1,4 @@
+// src/components/admin/tabs/anal/Section.tsx
 'use client';
 
 import * as React from 'react';

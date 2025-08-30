@@ -1,15 +1,17 @@
-// components/stages/SpotsMap.tsx
-"use client";
+// src/components/stages/SpotsMap.tsx
+'use client';
 
-import "leaflet/dist/leaflet.css";
+import type { Spot } from "./SpotsMapClient";
+
 import {
   MapContainer as RLMapContainer,
   TileLayer,
   Marker as RLMarker,
   Popup,
 } from "react-leaflet";
+
+import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import type { Spot } from "./SpotsMapClient";
 import * as React from "react";
 
 // --- Fix compat TS: versions de react-leaflet qui ne voient pas 'center' / 'icon' ---

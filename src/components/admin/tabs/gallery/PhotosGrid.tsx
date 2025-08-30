@@ -1,8 +1,10 @@
+// src/components/admin/tabs/gallery/PhotosGrid.tsx
 'use client';
 
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+
+import * as React from 'react';
 
 export default function PhotosGrid({
   photos,

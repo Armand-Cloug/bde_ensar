@@ -1,4 +1,4 @@
-// components/admin/tabs/adherents/columns.tsx
+// src/components/admin/tabs/adherents/columns.tsx
 'use client';
 
 import { Badge } from '@/components/ui/badge';

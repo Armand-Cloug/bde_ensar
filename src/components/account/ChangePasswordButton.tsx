@@ -1,10 +1,12 @@
+// src/components/account/ChangePasswordButton.tsx
 'use client';
 
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+
+import * as React from 'react';
 
 export default function ChangePasswordButton() {
   const [open, setOpen] = React.useState(false);

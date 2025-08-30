@@ -1,4 +1,6 @@
-"use client";
+// src/components/PingHousekeeping.tsx
+'use client';
+
 import { useEffect } from "react";
 
 export default function PingHousekeeping() {

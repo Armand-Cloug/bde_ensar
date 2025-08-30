@@ -1,8 +1,10 @@
-"use client";
+// src/components/home/InternshipsSection.tsx
+'use client';
+
+import { motion } from "framer-motion";
 
 import Section from "./Section";
 import SectionHeader from "./SectionHeader";
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function InternshipsSection() {

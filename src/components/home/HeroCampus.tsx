@@ -1,4 +1,5 @@
-"use client";
+// src/components/home/HeroCampus.tsx
+'use client';
 
 import { motion } from "framer-motion";
 import { University, School, Building2 } from "lucide-react";

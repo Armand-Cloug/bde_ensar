@@ -1,8 +1,10 @@
+// src/app/api/admin/anal/matieres/[id]/cours/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { mkdir, writeFile } from "fs/promises";
+
 import path from "path";
 
 export const runtime = "nodejs";

@@ -1,8 +1,9 @@
-// app/not-found.tsx
-import Link from "next/link";
+// src/app/not-found.tsx
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SearchX, Home, CalendarDays, Mail } from "lucide-react";
+
+import Link from "next/link";
 
 export default function NotFound() {
   return (

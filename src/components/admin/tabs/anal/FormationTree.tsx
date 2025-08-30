@@ -1,16 +1,35 @@
+// src/components/admin/tabs/anal/FormationTree.tsx
 'use client';
 
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
-  DropdownMenuSeparator, DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { MoreHorizontal, FileDown } from 'lucide-react';
 
-import { CreateSemestreDialog, CreateUeDialog, CreateMatiereDialog, CreateCoursDialog } from './CreateDialogs';
-import type { FormationNode, SemestreNode, UeNode, MatiereNode, CoursNode } from './type';
+import {
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel,
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import { 
+  CreateSemestreDialog, 
+  CreateUeDialog, 
+  CreateMatiereDialog, 
+  CreateCoursDialog 
+} from './CreateDialogs';
+
+import type { 
+  FormationNode, 
+  SemestreNode, 
+  UeNode, 
+  MatiereNode, 
+  CoursNode 
+} from './type';
+
+import * as React from 'react';
 import Section from './Section';
 
 /* ---------- Racine ---------- */

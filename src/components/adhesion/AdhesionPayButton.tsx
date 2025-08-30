@@ -1,3 +1,4 @@
+// src/components/adhesion/AdhesionPayButton.tsx
 'use client';
 
 import { useState } from "react";

@@ -1,4 +1,4 @@
-// app/page.tsx
+// src/app/page.tsx
 import HeroCampus from "@/components/home/HeroCampus";
 import BDESection from "@/components/home/BDESection";
 import FormationsSection from "@/components/home/FormationsSection";

@@ -1,14 +1,16 @@
+// src/components/admin/tabs/users/row-actions.tsx
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { MoreHorizontal } from 'lucide-react';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
 
 export default function RowActions({ userId }: { userId: string }) {
   const router = useRouter();
