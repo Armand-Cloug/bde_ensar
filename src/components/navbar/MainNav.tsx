@@ -55,7 +55,7 @@ export default function MainNav() {
 
         {/* Anal : admin OU (connecté & adherent) */}
         {(isAdmin || (isAuth && isAdherent)) && (
-          <Link className={linkClass('/anal')} href="/anal">Anal</Link>
+          <Link className={linkClass('/anal')} href="/anal">Cours</Link>
         )}
 
         {/* Adhésion : admin OU (non connecté) OU (connecté & non-adherent) */}

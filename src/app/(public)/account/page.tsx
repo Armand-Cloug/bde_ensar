@@ -118,7 +118,6 @@ export default async function AccountPage() {
             <RequestAlumniButton isAlumni={user.isAlumni} />
             <ChangePasswordButton />
             <SignOutButton />
-            <DeleteAccountButton />
           </div>
 
           {/* Tableau des infos */}
@@ -148,6 +147,9 @@ export default async function AccountPage() {
             </Table>
           </div>
         </CardContent>
+        <div className="flex flex-wrap gap-2 mb-4 mr-4">
+          <DeleteAccountButton />
+        </div>
       </Card>
     </main>
   );

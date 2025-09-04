@@ -15,7 +15,7 @@ export default function SignOutButton() {
       }
       variant="destructive"
     >
-      Sign Out
+      Se déconnecter
     </Button>
   );
 }

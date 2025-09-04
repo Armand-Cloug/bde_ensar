@@ -118,6 +118,32 @@ export default async function AdhesionPage({
         </div>
       </section>
 
+      {/* ÉTAPES */}
+      <section className="mt-12 md:mt-16 rounded-2xl border bg-white p-5 md:p-6">
+        <h3 className="text-xl font-semibold">Comment ça marche ?</h3>
+        <ol className="mt-4 grid gap-4 md:grid-cols-3">
+          <Step
+            n={1}
+            title="Connexion"
+            text="Connecte-toi (ou crée un compte) pour lier ton adhésion."
+          />
+          <Step
+            n={2}
+            title="Paiement"
+            text="Valide via Stripe en CB ou en allant voir notre trésorier en liquide, c’est rapide et sécurisé."
+          />
+          <Step
+            n={3}
+            title="C’est parti !"
+            text="Ton statut passe en adhérent instantanément."
+          />
+        </ol>
+        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+          <CalendarClock className="h-4 w-4" />
+          L’adhésion est valable jusqu’au 1er septembre suivant.
+        </p>
+      </section>
+
       {/* AVANTAGES */}
       <section className="mt-12 md:mt-16">
         <div className="flex items-end justify-between gap-4">
@@ -147,36 +173,10 @@ export default async function AdhesionPage({
           />
           <Feature
             icon={<Users className="h-5 w-5" />}
-            title="Réseau ENSAR"
-            text="Rencontre d’autres promos, projets et équipes."
+            title="Accés aux Cours"
+            text="Accède aux cours faits par les élèves pour les élèves."
           />
         </div>
-      </section>
-
-      {/* ÉTAPES */}
-      <section className="mt-12 md:mt-16 rounded-2xl border bg-white p-5 md:p-6">
-        <h3 className="text-xl font-semibold">Comment ça marche ?</h3>
-        <ol className="mt-4 grid gap-4 md:grid-cols-3">
-          <Step
-            n={1}
-            title="Connexion"
-            text="Connecte-toi (ou crée un compte) pour lier ton adhésion."
-          />
-          <Step
-            n={2}
-            title="Paiement"
-            text="Valide via Stripe, c’est rapide et sécurisé."
-          />
-          <Step
-            n={3}
-            title="C’est parti !"
-            text="Ton statut passe en adhérent instantanément."
-          />
-        </ol>
-        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-          <CalendarClock className="h-4 w-4" />
-          L’adhésion est valable jusqu’au 1er septembre suivant.
-        </p>
       </section>
     </main>
   );

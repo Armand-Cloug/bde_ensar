@@ -6,7 +6,7 @@ import Link from "next/link";
 import ContactForm from "@/components/contact/ContactForm";
 
 const BDE_EMAIL = process.env.BDE_EMAIL || "bde.ensar.contact@gmail.com";
-const BDE_ADDRESS = process.env.BDE_ADDRESS || "Adresse du BDE à compléter";
+const BDE_ADDRESS = process.env.BDE_ADDRESS || "11 RUE ARCHIMEDE 79000 NIORT";
 
 export default function ContactPage() {
   return (

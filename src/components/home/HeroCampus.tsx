@@ -12,31 +12,34 @@ export default function HeroCampus() {
         className="pointer-events-none absolute inset-0 -z-10"
         aria-hidden
       >
+        {/* Logo filigrane — occupe toute la moitié gauche (sur mobile: toute la largeur) */}
+        <div className="absolute inset-y-0 left-0 right-0 md:right-1/2 flex items-center justify-center">
+          {/* tu peux garder <img> si tu veux éviter la conf Next/Image */}
+          <img
+            src="/Logo_BDE_1.png"
+            alt=""
+            className="w-[200%] max-w-[2500px] opacity-[0.12] object-contain select-none"
+            draggable={false}
+          />
+        </div>
+          
         {/* Bande orange diagonale */}
         <div
           className="absolute inset-y-0 right-[-20vw] w-[70vw] bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700"
-          style={{
-            clipPath:
-              "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          }}
+          style={{ clipPath: "polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
         />
+
         {/* Trame douce */}
         <svg className="absolute inset-0 h-full w-full opacity-[0.07]">
           <defs>
-            <pattern
-              id="dots"
-              x="0"
-              y="0"
-              width="24"
-              height="24"
-              patternUnits="userSpaceOnUse"
-            >
+            <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
               <circle cx="1" cy="1" r="1" fill="currentColor" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#dots)" />
         </svg>
       </div>
+
 
       <div className="mx-auto flex min-h-[92vh] w-full max-w-6xl items-center px-4 md:px-6">
         <div className="grid w-full grid-cols-1 items-center gap-10 md:grid-cols-2">
@@ -78,7 +81,7 @@ export default function HeroCampus() {
 
           {/* Zone graphique animée */}
           <div className="relative h-[46vh] md:h-[56vh]">
-            <FloatingGrid />
+            {/* <FloatingGrid /> */}
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const formations = [
   {
     icon: GraduationCap,
     title: "Diplome d'Ingénieur",
-    lines: ["Sciende de la donnée", "Gestion des risque QSE", "Gestion des risque SSI"],
+    lines: ["Sciences de la donnée", "Gestion des risque QSE", "Gestion des risque SSI"],
   },
   {
     icon: BookOpenCheck,

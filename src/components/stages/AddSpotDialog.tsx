@@ -26,7 +26,7 @@ export default function AddSpotDialog() {
       <DialogTrigger asChild>
         <Button type="button" className="bg-amber-600 hover:bg-amber-700">
           <Plus className="mr-2 h-4 w-4" />
-          Proposer un stage
+          Partager mon stage
         </Button>
       </DialogTrigger>
 
