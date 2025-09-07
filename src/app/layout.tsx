@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/providers/SessionProvider";
 import PingHousekeeping from "@/components/PingHousekeeping";
+import Script from "next/script";
 
 import "@/styles/globals.css";
 
@@ -89,6 +90,7 @@ export const metadata: Metadata = {
       { url: "/favicon.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon.png", sizes: "16x16", type: "image/png" },
     ],
+    apple: [{ url: "/favicon.png", sizes: "180x180", type: "image/png" }],
     shortcut: ["/favicon.png"],
   },
   manifest: "/site.webmanifest",
@@ -118,15 +120,43 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh h-full flex flex-col overflow-x-hidden`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh h-full flex flex-col overflow-x-hidden`}>
+        {/* JSON-LD Organization */}
+        <Script id="ld-org" type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "BDE ENSAR",
+              "url": siteUrl,
+              "logo": `${siteUrl}/favicon.png`,
+              "sameAs": [
+                "https://www.instagram.com/bde_ensar"
+              ]
+            })
+          }}
+        />
+        {/* JSON-LD WebSite avec SearchAction (bonus) */}
+        <Script id="ld-website" type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "url": siteUrl,
+              "name": "BDE ENSAR",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": `${siteUrl}/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
+
         <AuthProvider>
           <Header />
           <PingHousekeeping />
-          <main id="content" className="flex-1 pt-14">
-            {children}
-          </main>
+          <main id="content" className="flex-1 pt-14">{children}</main>
           <Footer />
           <TailwindIndicator />
           <Toaster />

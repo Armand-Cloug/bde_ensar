@@ -1,27 +1,19 @@
 // src/components/adhesion/AdhesionPayButton.tsx
 'use client';
 
-import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
+const HELLOASSO_URL =
+  process.env.NEXT_PUBLIC_HELLOASSO_ADHESION_URL ||
+  "https://www.helloasso.com/associations/bde-ensar/adhesions/bde-ensar-1";
+
 export default function AdhesionPayButton() {
-  const [loading, setLoading] = useState(false);
-
-  async function onPay() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/stripe/checkout/adhesion", { method: "POST" });
-      if (!res.ok) throw new Error("Failed to create checkout");
-      const json = await res.json();
-      if (json.url) window.location.href = json.url;
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <Button onClick={onPay} disabled={loading} className="h-12 px-6 text-base">
-      {loading ? "Redirection…" : "Payer l’adhésion"}
+    <Button asChild className="h-12 px-6 text-base">
+      <Link href={HELLOASSO_URL} prefetch={false}>
+        Payer l’adhésion (HelloAsso)
+      </Link>
     </Button>
   );
 }
