@@ -92,7 +92,7 @@ export default async function AdhesionPage({
 
           <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="h-4 w-4" />
-            Paiement sécurisé par Stripe – activation immédiate
+            Paiement sécurisé par Hello Asso – activation rapide
           </p>
         </div>
 
@@ -130,12 +130,12 @@ export default async function AdhesionPage({
           <Step
             n={2}
             title="Paiement"
-            text="Valide via Stripe en CB ou en allant voir notre trésorier en liquide, c’est rapide et sécurisé."
+            text="Valide via Hello Asso en CB ou en allant voir notre trésorier en liquide, c’est rapide et sécurisé."
           />
           <Step
             n={3}
             title="C’est parti !"
-            text="Ton statut passe en adhérent instantanément."
+            text="Ton statut passe en adhérent dans les 48h suivantes."
           />
         </ol>
         <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
