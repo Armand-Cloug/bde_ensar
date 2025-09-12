@@ -1,9 +1,9 @@
-// src/components/stages/AddSpotDialog.tsx
 'use client';
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
+import * as React from "react";
 
 import {
   Dialog,
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 
 import SpotForm from "@/components/admin/tabs/stages/SpotForm";
-import * as React from "react";
 
 export default function AddSpotDialog() {
   const [open, setOpen] = React.useState(false);
@@ -30,9 +29,17 @@ export default function AddSpotDialog() {
         </Button>
       </DialogTrigger>
 
-      {/* 👇 z-index élevé pour passer au-dessus de Leaflet */}
-      <DialogContent className="sm:max-w-2xl z-[2000]">
-        <DialogHeader>
+      {/* z-index élevé pour passer au-dessus de Leaflet */}
+      <DialogContent
+        className="
+          z-[2000]
+          w-[95vw] sm:max-w-2xl
+          max-h-[85vh]
+          p-0
+          overflow-hidden
+        "
+      >
+        <DialogHeader className="px-6 pt-6">
           <DialogTitle>Ajouter un point (Stage)</DialogTitle>
           <DialogDescription>
             Seules des informations <strong>publiques</strong> sur
@@ -41,7 +48,15 @@ export default function AddSpotDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-2">
+        {/* Corps scrollable sur petits écrans */}
+        <div
+          className="
+            px-6 pb-6
+            overflow-y-auto
+            max-h-[calc(85vh-110px)]
+            overscroll-contain
+          "
+        >
           <SpotForm
             onCreated={() => {
               setOpen(false);
