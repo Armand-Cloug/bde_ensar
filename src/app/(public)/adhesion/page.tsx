@@ -77,7 +77,7 @@ export default async function AdhesionPage({
             </div>
 
             {isAuth ? (
-              <div className="rounded-full bg-black p-1">
+              <div className="rounded-full bg-black">
                 <AdhesionPayButton />
               </div>
             ) : (

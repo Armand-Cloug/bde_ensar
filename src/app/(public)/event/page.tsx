@@ -88,7 +88,7 @@ export default async function EventsIndexPage() {
                         href={ev.inscriptionLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex h-9 items-center justify-center rounded-md bg-amber-500 px-3 text-white text-sm font-medium hover:bg-amber-600"
+                        className="inline-flex h-9 items-center justify-center rounded-md bg-orange-600 hover:bg-orange-700 px-3 text-white text-sm font-medium hover:bg-amber-600"
                       >
                         S’inscrire
                       </a>
