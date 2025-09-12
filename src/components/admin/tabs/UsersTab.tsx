@@ -4,8 +4,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTableServer } from './users/data-table-server';
 import { columns, type UserRow } from './users/columns';
-
 import * as React from 'react';
+import ViewAdminsButton from './users/ViewAdminsButton';
 
 function useDebounced<T>(value: T, delay = 300) {
   const [debounced, setDebounced] = React.useState(value);
@@ -24,11 +24,7 @@ export default function UsersTab() {
   const pageSize = 15;
   const [total, setTotal] = React.useState(0);
 
-  // reset page quand on tape une recherche
-  React.useEffect(() => {
-    setPage(1);
-  }, [q]);
-
+  React.useEffect(() => setPage(1), [q]);
   const qDebounced = useDebounced(q, 350);
 
   React.useEffect(() => {
@@ -59,16 +55,19 @@ export default function UsersTab() {
     }
 
     load();
-    return () => {
-      cancelled = true;
-    };
-  }, [qDebounced, page]); // pageSize fixe ici
+    return () => { cancelled = true; };
+  }, [qDebounced, page]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Utilisateurs</CardTitle>
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle>Utilisateurs</CardTitle>
+          {/* Bouton à droite, “en face” de la barre de recherche (au plus près visuellement) */}
+          <ViewAdminsButton />
+        </div>
       </CardHeader>
+
       <CardContent>
         <DataTableServer
           columns={columns}

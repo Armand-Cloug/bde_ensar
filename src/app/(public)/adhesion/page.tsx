@@ -26,8 +26,8 @@ export default async function AdhesionPage({
   const session = await getServerSession(authOptions);
 
   const isAdherent = Boolean((session?.user as any)?.isAdherent);
-  if (isAdherent) redirect("/");
-  if (success === "1") redirect("/");
+  if (isAdherent) redirect("/account");
+  if (success === "1") redirect("/account");
 
   const isAuth = Boolean(session?.user);
   const price =
