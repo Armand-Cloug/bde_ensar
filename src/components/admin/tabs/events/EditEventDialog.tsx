@@ -135,7 +135,7 @@ export default function EditEventDialog({ open, onOpenChange, id, onSaved }: Pro
               />
             </div>
 
-            <Button onClick={save} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+            <Button onClick={save} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
               {loading ? 'Enregistrement…' : 'Enregistrer'}
             </Button>
           </div>

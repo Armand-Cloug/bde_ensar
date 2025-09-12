@@ -13,10 +13,10 @@ export default function HomePage() {
     <main className="relative w-full overflow-x-hidden">
       <HeroCampus />
       <BDESection />
+      <AdhesionSection />
       <FormationsSection />
       <NiortSection />
       <EventsSection />
-      <AdhesionSection />
       <AlumniSection />
       <InternshipsSection />
     </main>

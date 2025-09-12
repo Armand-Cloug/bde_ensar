@@ -128,7 +128,7 @@ export default function CreateEventDialog({ open, onOpenChange, onCreated }: Pro
           <Button
             onClick={submit}
             disabled={loading}
-            className="bg-amber-500 hover:bg-amber-600 text-white"
+            className="bg-amber-600 hover:bg-amber-700 text-white"
           >
             {loading ? 'Création…' : 'Créer'}
           </Button>
