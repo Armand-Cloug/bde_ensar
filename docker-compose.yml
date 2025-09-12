@@ -70,7 +70,7 @@ services:
     - PORT=3000
     - HOSTNAME=0.0.0.0
     volumes:
-      - uploads:/app/Upload
+      - uploads:/app/upload
 
   db:
     image: mariadb:11.4

@@ -88,7 +88,7 @@ export default function CreateGalleryDialog({
             <Label htmlFor="isActive">Activer</Label>
           </div>
 
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Création…' : 'Créer'}
           </Button>
         </div>

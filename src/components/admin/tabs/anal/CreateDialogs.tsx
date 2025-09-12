@@ -58,7 +58,7 @@ export function CreateFormationDialog({
             <Label>Nom *</Label>
             <Input value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Ex: Informatique" />
           </div>
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Création…' : 'Créer'}
           </Button>
         </div>
@@ -110,7 +110,7 @@ export function CreateSemestreDialog({
             <Label>Semestre *</Label>
             <Input value={semestre} onChange={(e) => setSemestre(e.target.value)} placeholder="S5, S6, ..." />
           </div>
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Création…' : 'Créer'}
           </Button>
         </div>
@@ -173,7 +173,7 @@ export function CreateUeDialog({
             <Label>Nom d’UE (facultatif)</Label>
             <Input value={nomUe} onChange={(e) => setNomUe(e.target.value)} />
           </div>
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Création…' : 'Créer'}
           </Button>
         </div>
@@ -225,7 +225,7 @@ export function CreateMatiereDialog({
             <Label>Nom de la matière *</Label>
             <Input value={nomMatiere} onChange={(e) => setNomMatiere(e.target.value)} />
           </div>
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Création…' : 'Créer'}
           </Button>
         </div>
@@ -297,7 +297,7 @@ export function CreateCoursDialog({
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             />
           </div>
-          <Button onClick={create} disabled={loading} className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button onClick={create} disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white">
             {loading ? 'Envoi…' : 'Créer le cours'}
           </Button>
         </div>

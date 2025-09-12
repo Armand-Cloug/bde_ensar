@@ -47,5 +47,5 @@ HEALTHCHECK --interval=30s --timeout=3s --retries=10 CMD curl -fsS http://localh
 CMD ["node", "server.js"]
 
 # Uploads
-RUN mkdir -p /app/Upload && chown -R node:node /app
+RUN mkdir -p /app/upload && chown -R node:node /app
 USER node

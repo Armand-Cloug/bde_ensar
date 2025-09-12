@@ -148,7 +148,7 @@ export default function GalleryEventDetailsDialog({
                   <Label htmlFor="active">Activer</Label>
                 </div>
                 <div>
-                  <Button onClick={saveInfo} disabled={saving} className="bg-amber-500 hover:bg-amber-600 text-white">
+                  <Button onClick={saveInfo} disabled={saving} className="bg-amber-600 hover:bg-amber-700 text-white">
                     {saving ? 'Enregistrement…' : 'Enregistrer'}
                   </Button>
                 </div>
@@ -175,7 +175,7 @@ export default function GalleryEventDetailsDialog({
                   </Label>
                 </div>
                 <div>
-                  <Button onClick={upload} disabled={uploading} className="bg-amber-500 hover:bg-amber-600 text-white">
+                  <Button onClick={upload} disabled={uploading} className="bg-amber-600 hover:bg-amber-700 text-white">
                     {uploading ? 'Upload en cours…' : 'Uploader'}
                   </Button>
                 </div>
