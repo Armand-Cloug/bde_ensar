@@ -45,7 +45,3 @@ COPY --from=builder /app/prisma ./prisma
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --retries=10 CMD curl -fsS http://localhost:3000/ || exit 1
 CMD ["node", "server.js"]
-
-# Uploads
-RUN mkdir -p /app/upload && chown -R node:node /app
-USER node

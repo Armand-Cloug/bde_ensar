@@ -4,10 +4,12 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { mkdir } from "fs/promises";
-
 import path from "path";
 
 export const runtime = "nodejs";
+
+const PUBLIC_DIR = path.join(process.cwd(), "public");
+const GALLERY_ROOT = path.join(PUBLIC_DIR, "upload", "gallery");
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -40,25 +42,34 @@ export async function POST(req: Request) {
   let body: any = {};
   try {
     body = await req.json();
-  } catch {}
+  } catch {
+    // no-op: body restera {}
+  }
 
   const title = (body?.title ?? "").trim();
-  const description = (body?.description ?? "").trim() || null;
+  const description =
+    typeof body?.description === "string"
+      ? body.description.trim() || null
+      : null;
   const isActive = Boolean(body?.isActive);
-  const coverImage = (body?.coverImage ?? "").trim() || null;
+  const coverImage =
+    typeof body?.coverImage === "string"
+      ? body.coverImage.trim() || null
+      : null;
 
   if (!title) {
     return NextResponse.json({ error: "Title required" }, { status: 400 });
   }
 
+  // Création DB
   const created = await db.galleryEvent.create({
     data: { title, description, isActive, coverImage },
     select: { id: true },
   });
 
-  // Créer le dossier /public/upload/<eventId>/
-  const uploadDir = path.join(process.cwd(), "public", "upload", created.id);
-  await mkdir(uploadDir, { recursive: true });
+  // Crée le dossier: public/upload/gallery/<eventId>
+  const eventDir = path.join(GALLERY_ROOT, created.id);
+  await mkdir(eventDir, { recursive: true });
 
   return NextResponse.json({ id: created.id }, { status: 201 });
 }

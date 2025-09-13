@@ -4,7 +4,6 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { mkdir, writeFile, stat, readdir } from "fs/promises";
-
 import path from "path";
 
 export const runtime = "nodejs";
@@ -88,7 +87,14 @@ export async function POST(
     );
   }
 
-  const baseDir = path.join(process.cwd(), "public", "upload", galleryEventId);
+  // Dossier correct: public/upload/gallery/<eventId>
+  const baseDir = path.join(
+    process.cwd(),
+    "public",
+    "upload",
+    "gallery",
+    galleryEventId
+  );
   await mkdir(baseDir, { recursive: true });
   const currentBytes = await dirSize(baseDir);
 
@@ -126,7 +132,12 @@ export async function POST(
       .toString(36)
       .slice(2, 8)}.${ext}`;
     const diskPath = path.join(baseDir, safeName);
-    const publicPath = path.posix.join("/upload", galleryEventId, safeName);
+    const publicPath = path.posix.join(
+      "/upload",
+      "gallery",
+      galleryEventId,
+      safeName
+    );
 
     const buf = Buffer.from(await f.arrayBuffer());
     await writeFile(diskPath, buf);

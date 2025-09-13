@@ -4,7 +4,6 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { rm } from "fs/promises";
-
 import path from "path";
 
 export const runtime = "nodejs";
@@ -47,7 +46,7 @@ export async function PATCH(
   try {
     body = await req.json();
   } catch {
-    // body reste vide si parsing échoue
+    // body restera {}
   }
 
   const data: any = {};
@@ -60,13 +59,13 @@ export async function PATCH(
     data.coverImage = body.coverImage.trim() || null;
   }
 
-  const updated = await db.galleryEvent.update({
+  await db.galleryEvent.update({
     where: { id },
     data,
     select: { id: true },
   });
 
-  return NextResponse.json({ ok: true, id: updated.id });
+  return NextResponse.json({ ok: true, id });
 }
 
 export async function DELETE(
@@ -80,11 +79,11 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Supprimer en DB (photos supprimées en cascade)
+  // 1) Supprimer l'event en DB (photos supprimées en cascade)
   await db.galleryEvent.delete({ where: { id } });
 
-  // Supprimer le dossier physique lié (si existe)
-  const dir = path.join(process.cwd(), "public", "upload", id);
+  // 2) Supprimer le dossier physique: public/upload/gallery/<eventId>
+  const dir = path.join(process.cwd(), "public", "upload", "gallery", id);
   await rm(dir, { recursive: true, force: true });
 
   return NextResponse.json({ ok: true });
