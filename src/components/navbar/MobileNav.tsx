@@ -67,7 +67,7 @@ export default function MobileNav() {
             </SheetClose>
 
             <SheetClose asChild>
-              <Link className={linkClass('/status')} href="/status">Status</Link>
+              <Link className={linkClass('/statuts')} href="/statuts">Status</Link>
             </SheetClose>
             {/* Anal : admin OU (connecté & adherent) */}
             {(isAdmin || (isAuth && isAdherent)) && (

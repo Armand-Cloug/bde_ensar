@@ -60,7 +60,7 @@ export default function ComingSoonPage() {
 
             <ul className="grid gap-3 text-muted-foreground md:grid-cols-2">
               <li className="rounded-lg border border-dashed p-3">
-                ✔️ Les status du BDE
+                ✔️ Les statuts du BDE
               </li>
               <li className="rounded-lg border border-dashed p-3">
                 ✔️ Le règlement du BDE
