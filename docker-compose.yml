@@ -19,6 +19,10 @@ services:
       - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
       # Debug utile au début
       - --log.level=DEBUG
+      # Access log vers un fichier sur l’hôte
+      - --accesslog=true
+      - --accesslog.format=common
+      - --accesslog.filepath=/var/log/traefik/access.log
     ports:
       - "80:80"
       - "443:443"
