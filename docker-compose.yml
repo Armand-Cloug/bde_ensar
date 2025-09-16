@@ -25,6 +25,7 @@ services:
     volumes:
       - ./traefik/acme.json:/letsencrypt/acme.json
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/log/traefik:/var/log/traefik 
     networks:
       - proxy
 
