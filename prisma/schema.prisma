@@ -72,6 +72,7 @@ model User {
   uploadedCourses        Cours[]
   uploadedPhotos         GalleryPhoto[]
   adhesions              Adhesion[]
+  gameScores             GameScore[]
   internshipVisits       InternshipVisit[] @relation("UserVisits")
   internshipSpotsCreated InternshipSpot[]  @relation("UserCreatedSpots")
  
@@ -358,4 +359,33 @@ model JobState {
   lockedAt  DateTime?
   lockedBy  String?
   @@map("job_state")
+}
+
+model Game {
+  id        String       @id @default(cuid())
+  slug      String       @unique
+  name      String
+  isActive  Boolean      @default(true)
+  scores    GameScore[]
+  createdAt DateTime     @default(now())
+
+  @@map("games")
+}
+
+model GameScore {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  gameId     String   @map("game_id")
+  score      Int
+  level      Int?                     // optionnel (niveau atteint)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  // Index utiles pour les classements
+  @@index([gameId, score(sort: Desc)])
+  @@index([userId, gameId, score(sort: Desc)])
+  @@map("game_scores")
 }
