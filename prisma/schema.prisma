@@ -72,9 +72,10 @@ model User {
   uploadedCourses        Cours[]
   uploadedPhotos         GalleryPhoto[]
   adhesions              Adhesion[]
-  gameScores             GameScore[]
+  scoresQuizz            ScoreQuizz[]
   internshipVisits       InternshipVisit[] @relation("UserVisits")
   internshipSpotsCreated InternshipSpot[]  @relation("UserCreatedSpots")
+  quizzCreated           Quizz[]           @relation("UserCreatedQuizz")
  
   @@map("users")
 }
@@ -361,31 +362,38 @@ model JobState {
   @@map("job_state")
 }
 
-model Game {
-  id        String       @id @default(cuid())
-  slug      String       @unique
-  name      String
-  isActive  Boolean      @default(true)
-  scores    GameScore[]
-  createdAt DateTime     @default(now())
+model ScoreQuizz {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  score       Int
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  @@map("games")
+  // Relation
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Index pour leaderboard global et per-user
+  @@index([score(sort: Desc), createdAt(sort: Desc)])
+  @@index([userId, score(sort: Desc)])
+  @@map("score_quizz")
 }
 
-model GameScore {
-  id         String   @id @default(cuid())
-  userId     String   @map("user_id")
-  gameId     String   @map("game_id")
-  score      Int
-  level      Int?                     // optionnel (niveau atteint)
-  createdAt  DateTime @default(now()) @map("created_at")
+// Table des questions du quizz
+model Quizz {
+  id         String           @id @default(cuid())
+  question   String
+  answer     String
+  points     Int?             @default(1)
+  difficulty String
+  category   String
+  status     Boolean          @default(false)
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt      @map("updated_at")
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  createdBy    String   @map("created_by")
+  // ← relation nommée "UserCreatedSpots"
+  createdByUser User    @relation("UserCreatedQuizz", fields: [createdBy], references: [id])
 
-  // Index utiles pour les classements
-  @@index([gameId, score(sort: Desc)])
-  @@index([userId, gameId, score(sort: Desc)])
-  @@map("game_scores")
+  @@index([status])
+  @@index([difficulty, points(sort: Desc)])
+  @@map("quizz")
 }
