@@ -4,7 +4,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { TailwindIndicator } from "@/components/Tailwind-indicator";
 import { Toaster } from "@/components/ui/toaster";
 
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/providers/SessionProvider";
 import PingHousekeeping from "@/components/PingHousekeeping";
@@ -154,7 +153,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
 
         <AuthProvider>
-          <Header />
           <PingHousekeeping />
           <main id="content" className="flex-1 pt-14">{children}</main>
           <Footer />

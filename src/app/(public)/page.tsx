@@ -12,7 +12,7 @@ export default function HomePage() {
   return (
     <main className="relative w-full overflow-x-hidden">
       <HeroCampus />
-      <BDESection />
+      <BDESection showInstagram />
       <AdhesionSection />
       <FormationsSection />
       <NiortSection />
