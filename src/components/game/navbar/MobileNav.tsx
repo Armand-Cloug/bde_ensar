@@ -55,7 +55,15 @@ export default function MobileNav() {
             </SheetClose>
 
             <SheetClose asChild>
-              <Link className={linkClass('/apropos')} href="/apropos">À propos</Link>
+              <Link className={linkClass('/game-menu')} href="/game-menu">Jeux</Link>
+            </SheetClose>
+
+            <SheetClose asChild>
+              <Link className={linkClass('/leaderboard')} href="/leaderboard">Classement</Link>
+            </SheetClose>
+
+            <SheetClose asChild>
+              <Link className={linkClass('/profil')} href="/profil">Mon Profil</Link>
             </SheetClose>
 
           </nav>

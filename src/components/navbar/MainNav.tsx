@@ -54,6 +54,7 @@ export default function MainNav() {
         <Link className={linkClass('/gallerie')} href="/gallerie">Galerie</Link>
         <Link className={linkClass('/statuts')} href="/statuts">Status</Link>
         <Link className={linkClass('/stages')} href="/stages">Stages</Link>
+        <Link className={linkClass('/game-menu')} href="/game-menu">Jeux</Link>
 
         {/* Anal : admin OU (connecté & adherent) */}
         {(isAdmin || (isAuth && isAdherent)) && (

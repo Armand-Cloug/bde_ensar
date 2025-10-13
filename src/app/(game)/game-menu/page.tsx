@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import Link from "next/link";
 
+import DiscordWidget from "@/components/game/menu/DiscordWidget";
+
 export const dynamic = "force-dynamic";
 
 export default async function GameMenuPage() {
@@ -74,6 +76,15 @@ export default async function GameMenuPage() {
           </li>
         </ul>
       </nav>
+
+      {/* ✅ Mise en avant Discord */}
+      <DiscordWidget
+        serverId="1420009866654646447"                 
+        inviteUrl="https://discord.gg/WuSN9pV66Q"
+        theme="dark"
+        title="Rejoins le Discord du BDE"
+        description="News, entraide, events et jeux : la communauté t’attend !"
+      />
     </main>
   );
 }

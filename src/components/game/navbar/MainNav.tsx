@@ -49,7 +49,7 @@ export default function MainNav() {
       {/* pb-2 pour laisser la place au soulignement */}
       <nav className="flex items-center gap-3 lg:gap-4 ml-8 pb-2">
         <Link className={linkClass('/')} href="/">Accueil</Link>
-        <Link className={linkClass('/quizz')} href="/game-menu">Jeux</Link>
+        <Link className={linkClass('/game-menu')} href="/game-menu">Jeux</Link>
         <Link className={linkClass('/leaderboard')} href="/leaderboard">Classement</Link>
         <Link className={linkClass('/profil')} href="/profil">Mon Profil</Link>
       </nav>

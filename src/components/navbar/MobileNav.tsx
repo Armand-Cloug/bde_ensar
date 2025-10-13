@@ -74,6 +74,10 @@ export default function MobileNav() {
               <Link className={linkClass('/stages')} href="/stages">Stage</Link>
             </SheetClose>
 
+            <SheetClose asChild>
+              <Link className={linkClass('/game-menu')} href="/game-menu">Jeux</Link>
+            </SheetClose>
+
             {/* Anal : admin OU (connecté & adherent) */}
             {(isAdmin || (isAuth && isAdherent)) && (
               <SheetClose asChild>
