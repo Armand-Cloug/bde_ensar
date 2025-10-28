@@ -2,6 +2,8 @@
 import { db } from "@/lib/db"
 import LeaderboardClient from "@/components/game/leaderboard/LeaderboardClient"
 
+export const dynamic = 'force-dynamic'; // pas de SSG/ISR au build
+
 function displayName(u: {
   firstName?: string | null
   lastName?: string | null
