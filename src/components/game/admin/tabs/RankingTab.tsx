@@ -7,6 +7,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { DataTableServer } from '@/components/admin/tabs/users/data-table-server'
 import { columns as makeColumns, type RankingRow } from './ranking/columns'
 import CreateScoreDialog from './ranking/CreateScoreDialog'
+import { AdminUser } from '../AdminPanel'
 
 function useDebounced<T>(value: T, delay = 350) {
   const [deb, setDeb] = React.useState(value)
@@ -17,6 +18,10 @@ function useDebounced<T>(value: T, delay = 350) {
   return deb
 }
 
+type RankingTabProps = {
+  user: AdminUser
+}
+
 const GAME_OPTIONS = [
   { value: 'quizz', label: 'Jeu 1 · Quizz' },
   { value: 'game2', label: 'Jeu 2' },
@@ -25,7 +30,7 @@ const GAME_OPTIONS = [
 ] as const
 type GameKey = (typeof GAME_OPTIONS)[number]['value']
 
-export default function RankingTab() {
+export default function RankingTab({ user }: RankingTabProps)  {
   const [game, setGame] = React.useState<GameKey>('quizz')
   const [q, setQ] = React.useState('')
   const qDeb = useDebounced(q, 350)

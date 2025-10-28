@@ -8,11 +8,16 @@ import { DataTableServer } from '@/components/admin/tabs/users/data-table-server
 import { columns as makeActiveColumns, type QuizzRow } from './quizz/columns'
 import { columns as makePendingColumns } from './quizz/pending-columns'
 import CreateQuestionDialog from './quizz/CreateQuestionDialog'
+import { AdminUser } from '../AdminPanel'
 
 function useDebounced<T>(v: T, d = 350) {
   const [deb, setDeb] = React.useState(v)
   React.useEffect(() => { const id = setTimeout(() => setDeb(v), d); return () => clearTimeout(id) }, [v, d])
   return deb
+}
+
+type QuizzTabProps = {
+  user: AdminUser
 }
 
 const CATEGORIES = [
@@ -24,7 +29,7 @@ const CATEGORIES = [
 
 type CatKey = (typeof CATEGORIES)[number]['value']
 
-export default function QuizzTab() {
+export default function QuizzTab({ user }: QuizzTabProps)  {
   // --- Actives ---
   const [cat, setCat] = React.useState<CatKey>('general')
   const [q, setQ] = React.useState('')
